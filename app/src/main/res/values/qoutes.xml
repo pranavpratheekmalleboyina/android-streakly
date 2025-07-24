@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="motivational_quotes">
+        <item>"Stay consistent, not necessarily perfect."</item>
+        <item>"Small steps every day lead to big results."</item>
+        <item>"Motivation gets you started. Habit keeps you going."</item>
+        <item>"Progress, not perfection."</item>
+        <item>"Discipline is choosing what you want most over what you want now."</item>
+        <item>"Your future is created by what you do today, not tomorrow."</item>
+        <item>"Push yourself, because no one else is going to do it for you."</item>
+        <item>"Don’t wish for it. Work for it."</item>
+    </string-array>
+</resources>
