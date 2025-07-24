@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "298979435878",
+    "project_id": "streakly-7c591",
+    "storage_bucket": "streakly-7c591.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:298979435878:android:e756a19a155354d464d4a7",
+        "android_client_info": {
+          "package_name": "com.pranav.streakly"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB_HFU6TuJQwxa_3zqxP_SgHJsd46bmcWw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

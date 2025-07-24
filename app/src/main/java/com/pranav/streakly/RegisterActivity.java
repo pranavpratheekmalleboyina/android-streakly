@@ -1,0 +1,134 @@
+package com.pranav.streakly;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Patterns;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.Objects;
+
+public class RegisterActivity extends AppCompatActivity {
+    private EditText txtName, txtEmailAddress, txtPassword, txtConfirmPassword;
+    private Button btnRegister;
+    private TextView loginLink;
+    private FirebaseAuth mAuth;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_register);
+
+        // initialize the firebase authentication
+        mAuth = FirebaseAuth.getInstance();
+
+        // initialize the ui elements
+        txtName = findViewById(R.id.txtName);
+        txtEmailAddress = findViewById(R.id.txtEmailAddress);
+        txtPassword = findViewById(R.id.txtPassword);
+        txtConfirmPassword = findViewById(R.id.txtConfirmPassword);
+        btnRegister = findViewById(R.id.btnRegister);
+        loginLink = findViewById(R.id.loginLink);
+        btnRegister = findViewById(R.id.btnRegister);
+        btnRegister.setOnClickListener(v -> registerUser());
+
+        // navigates to login page in case the user already has an account
+        loginLink.setOnClickListener(v -> {
+            Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+            startActivity(intent);
+        });
+    }
+
+    private void registerUser() {
+        String name = txtName.getText().toString().trim();
+        String email = txtEmailAddress.getText().toString().trim();
+        String password = txtPassword.getText().toString().trim();
+        String confirmPassword = txtConfirmPassword.getText().toString().trim();
+
+        //name validation
+        if (TextUtils.isEmpty(name)) {
+            txtName.setError("Name is required");
+            txtName.requestFocus();
+            return;
+        }
+
+        // email validation
+        if (TextUtils.isEmpty(email) || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            txtEmailAddress.setError("Valid email is required");
+            txtEmailAddress.requestFocus();
+            return;
+        }
+
+        // password validation
+        if (TextUtils.isEmpty(password) || password.length() < 6) {
+            txtPassword.setError("Password must be at least 6 characters");
+            txtPassword.requestFocus();
+            return;
+        }
+
+        // password matching validation
+        if (!password.equals(confirmPassword)) {
+            txtConfirmPassword.setError("Passwords do not match");
+            txtConfirmPassword.requestFocus();
+            return;
+        }
+
+        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                assert firebaseUser != null;
+                String uid = firebaseUser.getUid();
+
+                FirebaseDatabase.getInstance().getReference("Users")
+                        .child(uid)
+                        .setValue(new User(name,email))
+                        .addOnCompleteListener(dbTask -> {
+                            if(dbTask.isSuccessful()){
+                                showAlert("Success", "Registration successful!", true);
+                            }else{
+                                showAlert("Error", "Failed to save user data. Please try again.", false);
+                            }
+                        });
+            } else {
+                showAlert("Error", "Registration failed: " + Objects.requireNonNull(task.getException()).getMessage(), false);
+            }
+        });
+    }
+
+    // Alert Dialog Function
+    private void showAlert(String title, String message, boolean success) {
+        new AlertDialog.Builder(RegisterActivity.this)
+                .setTitle(title)
+                .setMessage(message)
+                .setCancelable(false)
+                .setPositiveButton("OK", (dialog, which) -> {
+                    dialog.dismiss();
+                    if (success) {
+                        // Go to Home screen or Login
+                        startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                        finish();
+                    }
+                })
+                .show();
+    }
+    public static class User{
+        public String name,email;
+
+        public User(){}
+
+        public User(String name, String email) {
+            this.name = name;
+            this.email = email;
+        }
+
+    }
+}

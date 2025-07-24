@@ -1,0 +1,10 @@
+
+sample user 1
+name: TestUser1
+email: testuser1@gmail.com
+password: pass123
+
+sample user 2
+name: TestUser2
+email: testuser2@gmail.com
+password: pass456
