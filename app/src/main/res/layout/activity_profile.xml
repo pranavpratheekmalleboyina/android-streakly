@@ -1,77 +1,104 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<!-- res/layout/activity_profile.xml -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/profile_info_bg"
-    android:padding="24dp"
-    >
+    android:background="@color/app_background"
+    android:padding="24dp">
 
-    <TextView
-        android:id="@+id/profileTitle"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Profile Settings"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:textColor="#333"
-        android:gravity="center"
-        android:layout_marginBottom="24dp"/>
+        android:gravity="center_horizontal">
 
-    <!-- User avatar (optional) -->
-    <ImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:src="@drawable/ic_user"
-        android:layout_gravity="center"
-        android:layout_marginBottom="16dp"
-        android:contentDescription="User Avatar" />
+        <TextView
+            android:text="Profile Settings"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="#212121"
+            android:layout_marginBottom="24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
-    <!-- Display name -->
-    <TextView
-        android:id="@+id/tvDisplayName"
-        android:text="testuser1"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:textColor="#3F51B5"
-        android:layout_gravity="center"
-        android:layout_marginBottom="16dp"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"/>
+        <!-- Avatar -->
+        <ImageView
+            android:id="@+id/ivAvatar"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:src="@drawable/ic_user"
+            android:background="@drawable/circle_bg"
+            android:scaleType="centerCrop"
+            android:layout_marginBottom="8dp" />
 
-    <!-- Email -->
-    <TextView
-        android:id="@+id/tvEmail"
-        android:text="testuser1@gmail.com"
-        android:textSize="16sp"
-        android:textColor="#444"
-        android:layout_gravity="center"
-        android:layout_marginBottom="24dp"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"/>
+        <Button
+            android:id="@+id/btnChangeAvatar"
+            android:text="Change Avatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:visibility="gone"
+            android:backgroundTint="#03A9F4"
+            android:textColor="#FFFFFF" />
 
-    <!-- Change name field -->
-    <EditText
-        android:id="@+id/etDisplayName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter new username"
-        android:padding="12dp"
-        android:background="@drawable/input_bg"
-        android:layout_marginBottom="16dp"/>
+        <!-- Username -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Username">
 
-    <Button
-        android:id="@+id/btnUpdateName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="SAVE CHANGES"
-        android:backgroundTint="@color/purple_500"
-        android:textColor="#FFF"/>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etUsername"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
-        android:id="@+id/btnLogout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Logout"
-        android:backgroundTint="@color/red"
-        android:textColor="#FFF"/>
-</LinearLayout>
+        <!-- Email (read-only always) -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Email">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="12dp"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/btnEdit"
+                android:text="Edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#4CAF50"
+                android:textColor="#FFFFFF" />
+
+            <Button
+                android:id="@+id/btnSave"
+                android:text="Save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_marginStart="8dp"
+                android:backgroundTint="#4CAF50"
+                android:textColor="#FFFFFF" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnLogout"
+            android:text="Logout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#F44336"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
+</ScrollView>
