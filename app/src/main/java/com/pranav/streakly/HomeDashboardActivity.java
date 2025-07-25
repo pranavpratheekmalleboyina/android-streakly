@@ -1,5 +1,6 @@
 package com.pranav.streakly;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -37,6 +38,9 @@ public class HomeDashboardActivity extends AppCompatActivity {
     TextView tvGreeting, tvMotivation;
     FirebaseUser currentUser;
     FloatingActionButton fabAddHabit;
+    List<Habit> habitList = new ArrayList<>();
+
+    HabitAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,10 +97,11 @@ public class HomeDashboardActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private void loadHabitsForUser(){
         RecyclerView recyclerHabits = findViewById(R.id.recyclerHabits);
-        List<Habit> habitList = new ArrayList<>();
-        HabitAdapter adapter = new HabitAdapter(habitList);
+
+        adapter = new HabitAdapter(habitList,this);
 
         recyclerHabits.setLayoutManager(new LinearLayoutManager(this));
         recyclerHabits.setAdapter(adapter);
@@ -114,17 +119,21 @@ public class HomeDashboardActivity extends AppCompatActivity {
         db.collection("users")
                 .document(userId)
                 .collection("habits")
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
+                .addSnapshotListener((queryDocumentSnapshots, error) -> {
+                    if (error != null) {
+                        // ✅ This is how you handle failure
+                        Log.e("Firestore", "Listen failed", error);
+                        Toast.makeText(this, "Failed to load habits", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
                     habitList.clear();
                     for (DocumentSnapshot doc : queryDocumentSnapshots) {
                         Habit habit = doc.toObject(Habit.class);
+                        if(habit != null){habit.setId(doc.getId());}
                         habitList.add(habit);
                     }
                     adapter.notifyDataSetChanged();
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(this, "Failed to load habits", Toast.LENGTH_SHORT).show();
                 });
     }
 

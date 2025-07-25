@@ -26,7 +26,7 @@ public class SplashActivity extends AppCompatActivity {
         //details about the animation
         ImageView splashLogo = findViewById(R.id.splashLogo);
         AlphaAnimation fadeIn = new AlphaAnimation(0f,1f);
-        fadeIn.setDuration(500); //the fade in occurs for only 1 second
+        fadeIn.setDuration(500); //the fade in occurs for only 0.5 second
         fadeIn.setFillAfter(true);
         splashLogo.startAnimation(fadeIn);
 
