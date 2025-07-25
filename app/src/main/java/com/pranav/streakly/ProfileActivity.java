@@ -116,7 +116,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void saveDetails(){
-        String updatedName = etUsername.getText().toString().trim();
+        String updatedName = etUsername.getText().toString();
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                                                       .setDisplayName(updatedName).build();
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();

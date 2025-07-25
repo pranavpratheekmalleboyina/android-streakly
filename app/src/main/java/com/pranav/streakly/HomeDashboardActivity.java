@@ -3,12 +3,32 @@ package com.pranav.streakly;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
+import com.pranav.streakly.adapters.HabitAdapter;
+import com.pranav.streakly.models.Habit;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 public class HomeDashboardActivity extends AppCompatActivity {
@@ -16,6 +36,7 @@ public class HomeDashboardActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
     TextView tvGreeting, tvMotivation;
     FirebaseUser currentUser;
+    FloatingActionButton fabAddHabit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +47,9 @@ public class HomeDashboardActivity extends AppCompatActivity {
         tvGreeting = findViewById(R.id.tvGreeting);
         tvMotivation = findViewById(R.id.tvMotivation);
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        fabAddHabit = findViewById(R.id.fabAddHabit);
 
+        saveUserDetailsToFirestore();
         if(currentUser != null){
             String username = currentUser.getDisplayName();
             tvGreeting.setText("Hello " + username + " 👋");
@@ -37,19 +60,13 @@ public class HomeDashboardActivity extends AppCompatActivity {
         // Set default selected item
         bottomNavigationView.setSelectedItemId(R.id.nav_home);
 
-        bottomNavigationView.setOnItemSelectedListener(item -> {
-            if(item.getItemId() == R.id.nav_home){
-                return true;
-            }else if(item.getItemId() == R.id.nav_stats){
-                startActivity(new Intent(this, StatsActivity.class));
-                return true;
-            }else if(item.getItemId() == R.id.nav_profile){
-                startActivity(new Intent(this, ProfileActivity.class));
-                return true;
-            }
-            return false;
-        });
+        bottomNavigationView.setOnItemSelectedListener(item -> setNavigationItems(item));
+
         setMotivationalQuote();
+
+        fabAddHabit.setOnClickListener(this::addHabits);
+
+        loadHabitsForUser();
     }
 
     // for loading the motivational qoute
@@ -76,4 +93,79 @@ public class HomeDashboardActivity extends AppCompatActivity {
         }
     }
 
+    private void loadHabitsForUser(){
+        RecyclerView recyclerHabits = findViewById(R.id.recyclerHabits);
+        List<Habit> habitList = new ArrayList<>();
+        HabitAdapter adapter = new HabitAdapter(habitList);
+
+        recyclerHabits.setLayoutManager(new LinearLayoutManager(this));
+        recyclerHabits.setAdapter(adapter);
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (user == null) {
+            Toast.makeText(this, "User not logged in", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String userId = user.getUid();
+
+        db.collection("users")
+                .document(userId)
+                .collection("habits")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    habitList.clear();
+                    for (DocumentSnapshot doc : queryDocumentSnapshots) {
+                        Habit habit = doc.toObject(Habit.class);
+                        habitList.add(habit);
+                    }
+                    adapter.notifyDataSetChanged();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, "Failed to load habits", Toast.LENGTH_SHORT).show();
+                });
+    }
+
+    private boolean setNavigationItems(MenuItem item){
+        if(item.getItemId() == R.id.nav_home){
+            return true;
+        }else if(item.getItemId() == R.id.nav_stats){
+            startActivity(new Intent(this, StatsActivity.class));
+            return true;
+        }else if(item.getItemId() == R.id.nav_profile){
+            startActivity(new Intent(this, ProfileActivity.class));
+            return true;
+        }
+        return false;
+    }
+
+    private void addHabits(View view){
+        Intent intent = new Intent(HomeDashboardActivity.this, AddHabitActivity.class);
+        startActivity(intent);
+    }
+
+    private void saveUserDetailsToFirestore(){
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) return;
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        String userId = user.getUid();
+        String email = user.getEmail();
+        String name = user.getDisplayName(); // optional, can be null
+
+        Map<String, Object> userData = new HashMap<>();
+        userData.put("email", email);
+        userData.put("name", name != null ? name : "Anonymous");
+        userData.put("createdAt", FieldValue.serverTimestamp());
+
+        db.collection("users")
+                .document(userId)
+                .set(userData, SetOptions.merge()) // merge keeps existing data (like habits)
+                .addOnSuccessListener(unused -> Log.d("Firestore", "User saved/updated"))
+                .addOnFailureListener(e -> Log.e("Firestore", "Error saving user", e));
+
+    }
 }

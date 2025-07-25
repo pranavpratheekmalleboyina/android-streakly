@@ -32,6 +32,18 @@
             android:screenOrientation="portrait"
             android:exported="false" />
         <activity
+            android:name="com.pranav.streakly.ProfileActivity"
+            android:screenOrientation="portrait"
+            android:exported="false" />
+        <activity
+            android:name="com.pranav.streakly.StatsActivity"
+            android:screenOrientation="portrait"
+            android:exported="false" />
+        <activity
+            android:name="com.pranav.streakly.AddHabitActivity"
+            android:screenOrientation="portrait"
+            android:exported="false" />
+        <activity
             android:name="com.pranav.streakly.SplashActivity"
             android:screenOrientation="portrait"
             android:exported="true"
@@ -41,15 +53,5 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.pranav.streakly.ProfileActivity"
-            android:screenOrientation="portrait"
-            android:exported="false" />
-        <activity
-            android:name="com.pranav.streakly.StatsActivity"
-            android:screenOrientation="portrait"
-            android:exported="false" />
-
     </application>
-
 </manifest>
