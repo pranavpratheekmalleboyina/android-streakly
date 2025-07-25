@@ -41,16 +41,23 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
 
     @Override
     public void onBindViewHolder(@NonNull HabitViewHolder holder, int position) {
+        position = holder.getAdapterPosition();
         Habit habit = habitList.get(position);
         holder.tvHabitName.setText(habit.getName());
         holder.tvProgress.setText("0% complete"); // You can compute progress if needed
 
         holder.btnEdit.setOnClickListener(v -> {
-            showEditDialog(habitList.get(position), position);
+            int truePosition = holder.getAdapterPosition();
+            if (truePosition != RecyclerView.NO_POSITION){
+                showEditDialog(habitList.get(truePosition), truePosition);
+            }
         });
 
         holder.btnDelete.setOnClickListener(v -> {
-            deleteHabitFromFirestore(habitList.get(position).getId(), position);
+            int truePosition = holder.getAdapterPosition();
+            if (truePosition != RecyclerView.NO_POSITION) {
+                deleteHabitFromFirestore(habitList.get(truePosition).getId(), truePosition);
+            }
         });
 
     }
@@ -62,7 +69,15 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
 
     private void deleteHabitFromFirestore(String habitId, int position) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user == null) return;
+        if (user == null) {
+            Toast.makeText(context, "User is not authenticated", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (position < 0 || position >= habitList.size()) {
+            Toast.makeText(context, "Invalid item position", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("users")
@@ -71,8 +86,6 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
                 .document(habitId)
                 .delete()
                 .addOnSuccessListener(unused -> {
-                    habitList.remove(position);
-                    notifyItemRemoved(position);
                     Toast.makeText(context, "Habit deleted", Toast.LENGTH_SHORT).show();
                 })
                 .addOnFailureListener(e -> {
