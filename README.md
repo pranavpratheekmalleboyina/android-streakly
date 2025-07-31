@@ -46,11 +46,16 @@ Streakly/
 ```
 
 ## Test Cases 
+These are the test cases that have been developed till now as compared to the previous version.
 - Register the user
 - Login the user 
-- View the dashboard
+- View the user profile information and update the username 
+- Return to the home dashboard and we can see the user being greeted with a motivational qoute being displayed everytime a user logs in 
+- View the home dashboard
+- Create a new habit by pressing the + floating button 
+- Enter the habit with its daily goal
+- Save the habit and return to the list of habits by the particular user 
 - View the user stats
-- View the user profile information and update the username
 
 ## 📝 Author
 - Pranav Pratheek Malleboyina

@@ -44,7 +44,8 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
         position = holder.getAdapterPosition();
         Habit habit = habitList.get(position);
         holder.tvHabitName.setText(habit.getName());
-        holder.tvProgress.setText("0% complete"); // You can compute progress if needed
+        holder.tvHabitGoal.setText(habit.getGoal());
+        holder.tvStreak.setText("Streak: " + habit.getStreakCount() + " 🔥");
 
         holder.btnEdit.setOnClickListener(v -> {
             int truePosition = holder.getAdapterPosition();
@@ -60,6 +61,25 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
             }
         });
 
+        holder.btnLog.setOnClickListener(v -> {
+            int truePosition = holder.getAdapterPosition();
+            if (truePosition != RecyclerView.NO_POSITION) {
+                habit.setStreakCount(habit.getStreakCount() + 1);
+                if(habit.getStreakCount() > habit.getBestStreak()){
+                    habit.setBestStreak(habit.getStreakCount());
+                }
+                logProgressForUser(habitList.get(truePosition).getId(), habit.getStreakCount());
+                notifyItemChanged(truePosition);
+            }
+        });
+
+        holder.btnResetStreak.setOnClickListener(v ->{
+            int truePosition = holder.getAdapterPosition();
+            if (truePosition != RecyclerView.NO_POSITION) {
+                logProgressForUser(habitList.get(truePosition).getId(), 0);
+                notifyItemChanged(truePosition);
+            }
+        });
     }
 
     @Override
@@ -142,17 +162,34 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
                 });
     }
 
+    private void logProgressForUser(String habitId, int streakCount){
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) return;
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("streakCount", streakCount);
+
+        db.collection("users")
+                .document(user.getUid())
+                .collection("habits")
+                .document(habitId)
+                .update(updates);
+    }
 
     public static class HabitViewHolder extends RecyclerView.ViewHolder {
-        TextView tvHabitName, tvProgress;
-        ImageView btnEdit,btnDelete;
+        TextView tvHabitName, tvStreak, tvHabitGoal;
+        ImageView btnEdit,btnDelete,btnLog,btnResetStreak;
 
         public HabitViewHolder(@NonNull View itemView) {
             super(itemView);
+            tvHabitGoal = itemView.findViewById(R.id.tvHabitGoal);
             tvHabitName = itemView.findViewById(R.id.tvHabitName);
-            tvProgress = itemView.findViewById(R.id.tvProgress);
+            tvStreak = itemView.findViewById(R.id.tvStreak);
             btnEdit = itemView.findViewById(R.id.btnEdit);
             btnDelete = itemView.findViewById(R.id.btnDelete);
+            btnLog = itemView.findViewById(R.id.btnLog);
+            btnResetStreak = itemView.findViewById(R.id.btnResetStreak);
         }
     }
 }

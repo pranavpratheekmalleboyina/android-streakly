@@ -3,49 +3,74 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp"
     android:background="@drawable/habit_card_bg"
-    android:layout_marginBottom="12dp">
+    android:padding="16dp"
+    android:layout_marginTop="12dp"
+    android:layout_marginHorizontal="16dp">
+
+    <TextView
+        android:id="@+id/tvHabitName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Read Book"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/black" />
+
+    <TextView
+        android:id="@+id/tvHabitGoal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Goal: Read 10 pages/day"
+        android:textSize="14sp"
+        android:textColor="@color/gray"
+        android:layout_marginTop="4dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        >
+        android:gravity="center_vertical"
+        android:layout_marginTop="8dp">
 
         <TextView
-            android:id="@+id/tvHabitName"
+            android:id="@+id/tvStreak"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="Habit Name"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="#333" />
+            android:layout_weight="1"
+            android:text="Streak: 0 🔥"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/btnLog"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/ic_checkmark"
+            android:contentDescription="Log Progress" />
+
+        <ImageView
+            android:id="@+id/btnResetStreak"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/ic_reset"
+            android:contentDescription="Reset Streak" />
 
         <ImageView
             android:id="@+id/btnEdit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="16dp"
             android:src="@drawable/ic_edit"
-            android:layout_marginStart="8dp"
             android:contentDescription="Edit Habit" />
 
         <ImageView
             android:id="@+id/btnDelete"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:src="@drawable/ic_delete"
-            android:layout_marginStart="8dp"
             android:contentDescription="Delete Habit" />
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/tvProgress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text="0% complete"
-        android:textColor="#666"
-        android:textSize="14sp"/>
 </LinearLayout>

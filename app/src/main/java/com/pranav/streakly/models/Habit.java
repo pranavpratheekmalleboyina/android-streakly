@@ -1,19 +1,23 @@
 package com.pranav.streakly.models;
 
 public class Habit {
-
     private String name;
     private String id;
     private String goal;
-    private int progress;
+    private int streakCount;
+    private int bestStreak;
+    private long lastLoggedDate;
+
+    public Habit(String name, String id, String goal, int streakCount, int bestStreak, long lastLoggedDate) {
+        this.name = name;
+        this.id = id;
+        this.goal = goal;
+        this.streakCount = 0;
+        this.bestStreak = 0;
+        this.lastLoggedDate = 0;
+    }
 
     public Habit() {} // Required for Firestore
-
-    public Habit(String name, String goal) {
-        this.name = name;
-        this.goal = goal;
-        this.progress = 0;
-    }
 
     public String getName() {
         return name;
@@ -31,9 +35,6 @@ public class Habit {
         this.goal = goal;
     }
 
-    public int getProgress() {
-        return progress;
-    }
 
     public String getId() {
         return id;
@@ -42,4 +43,30 @@ public class Habit {
     public void setId(String id){
         this.id = id;
     }
+
+    public int getStreakCount() {
+        return streakCount;
+    }
+
+    public void setStreakCount(int streakCount) {
+        this.streakCount = streakCount;
+    }
+
+    public int getBestStreak() {
+        return bestStreak;
+    }
+
+    public void setBestStreak(int bestStreak) {
+        this.bestStreak = bestStreak;
+    }
+
+    public long getLastLoggedDate() {
+        return lastLoggedDate;
+    }
+
+    public void setLastLoggedDate(long lastLoggedDate) {
+        this.lastLoggedDate = lastLoggedDate;
+    }
+
+
 }
