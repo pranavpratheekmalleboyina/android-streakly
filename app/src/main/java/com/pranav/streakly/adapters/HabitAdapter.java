@@ -2,6 +2,7 @@ package com.pranav.streakly.adapters;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.media.SoundPool;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,12 +28,17 @@ import java.util.Map;
 public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHolder>{
     private List<Habit> habitList;
     private Context context;
-    //private SharedPreferences badgePreferences;
+    private SharedPreferences badgePreferences;
+    private SoundPool soundPool;
+    private int soundConsistentHabitLog,soundTotalHabitLog;
 
     public HabitAdapter(List<Habit> habitList,Context context) {
         this.habitList = habitList;
         this.context = context;
-        //this.badgePreferences = context.getSharedPreferences("BadgePrefs", Context.MODE_PRIVATE);
+        this.badgePreferences = context.getSharedPreferences("BadgePrefs", Context.MODE_PRIVATE);
+        soundPool = new SoundPool.Builder().setMaxStreams(2).build();
+        soundConsistentHabitLog = soundPool.load(context, R.raw.single_habit_consistent_reward, 1);
+        soundTotalHabitLog = soundPool.load(context, R.raw.total_habit_reward, 1);
     }
 
     @NonNull
@@ -88,7 +94,7 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
     }
 
     private void checkForMilestone(Habit habit,List<Habit> habits) {
-        //SharedPreferences.Editor badgeEditor = badgePreferences.edit();
+        SharedPreferences.Editor badgeEditor = badgePreferences.edit();
         int totalStreakCount = 0;
         int streakCount = habit.getStreakCount();
         int noOfHabits = habits.size();
@@ -97,16 +103,16 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
             totalStreakCount += hab.getStreakCount();
         }
 
-        //&& !badgePreferences.getBoolean("badge_logs_10", false)
-        if(totalStreakCount >= 20 ){
+        if(totalStreakCount >= 20 && !(badgePreferences.getBoolean("badge_logs_10", false))){
+            soundPool.play(soundTotalHabitLog, 1, 1, 0, 0, 1);
             Toast.makeText(context, "Congrats! You have unlocked a new badge: Consistency Champ", Toast.LENGTH_SHORT).show();
-            //badgeEditor.putBoolean("badge_logs_10", true);
+            badgeEditor.putBoolean("badge_logs_10", true);
         }
 
-        //&& !badgePreferences.getBoolean("badge_streak_7", false)
-        if(streakCount >= 10 ){
-            Toast.makeText(context, "Congrats! You have unlocked a new badge: 1 week Streakster", Toast.LENGTH_SHORT).show();
-            //badgeEditor.putBoolean("badge_streak_7", true);
+        if(streakCount >= 10 && !(badgePreferences.getBoolean("badge_streak_7", false))){
+            soundPool.play(soundConsistentHabitLog, 1, 1, 0, 0, 1);
+            Toast.makeText(context, "Congrats! You have unlocked a new badge: 10 Log Streakster", Toast.LENGTH_SHORT).show();
+            badgeEditor.putBoolean("badge_streak_7", true);
         }
 
         /*if(noOfHabits >= 5 && !badgePreferences.getBoolean("badge_habit_5", false)){
@@ -114,7 +120,7 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
             badgeEditor.putBoolean("badge_habit_5", true);
         }*/
 
-        //badgeEditor.apply();
+        badgeEditor.apply();
     }
 
     @Override
@@ -141,7 +147,11 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
                 .document(habitId)
                 .delete()
                 .addOnSuccessListener(unused -> {
-                    //Toast.makeText(context, "Habit deleted", Toast.LENGTH_SHORT).show();
+                    // only for the development and testing part
+                    if(habitList.isEmpty()){
+                        Toast.makeText(context, "Preferences reset! Badges Lost", Toast.LENGTH_SHORT).show();
+                        this.badgePreferences.edit().clear().apply();
+                    }
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(context, "Failed to delete", Toast.LENGTH_SHORT).show();
@@ -190,7 +200,6 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
                     updatedHabit.setName(newName);
                     updatedHabit.setGoal(newGoal);
                     notifyItemChanged(position);
-                    //Toast.makeText(context, "Habit updated", Toast.LENGTH_SHORT).show();
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(context, "Failed to update habit", Toast.LENGTH_SHORT).show();
@@ -216,7 +225,6 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
     public static class HabitViewHolder extends RecyclerView.ViewHolder {
         TextView tvHabitName, tvStreak, tvHabitGoal,tvBestStreak;
         ImageView btnEdit,btnDelete,btnLog,btnResetStreak;
-
         public HabitViewHolder(@NonNull View itemView) {
             super(itemView);
             tvHabitGoal = itemView.findViewById(R.id.tvHabitGoal);

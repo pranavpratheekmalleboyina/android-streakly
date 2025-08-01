@@ -136,6 +136,8 @@ public class HomeDashboardActivity extends AppCompatActivity {
                         habitList.add(habit);
                     }
                     adapter.notifyDataSetChanged();
+
+                    //add the logic for toast saying that the 5th habit has been added and the badge has been unlocked
                 });
     }
 
