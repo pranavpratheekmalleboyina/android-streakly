@@ -37,8 +37,8 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
         this.context = context;
         this.badgePreferences = context.getSharedPreferences("BadgePrefs", Context.MODE_PRIVATE);
         soundPool = new SoundPool.Builder().setMaxStreams(2).build();
-        soundConsistentHabitLog = soundPool.load(context, R.raw.single_habit_consistent_reward, 1);
-        soundTotalHabitLog = soundPool.load(context, R.raw.total_habit_reward, 1);
+        soundConsistentHabitLog = soundPool.load(context, R.raw.single_habit_log_reward, 1);
+        soundTotalHabitLog = soundPool.load(context, R.raw.multiple_habit_log_reward, 1);
     }
 
     @NonNull
@@ -114,12 +114,6 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
             Toast.makeText(context, "Congrats! You have unlocked a new badge: 10 Log Streakster", Toast.LENGTH_SHORT).show();
             badgeEditor.putBoolean("badge_streak_7", true);
         }
-
-        /*if(noOfHabits >= 5 && !badgePreferences.getBoolean("badge_habit_5", false)){
-            Toast.makeText(context, "Congrats! You have unlocked a new badge: Habit Master", Toast.LENGTH_LONG).show();
-            badgeEditor.putBoolean("badge_habit_5", true);
-        }*/
-
         badgeEditor.apply();
     }
 

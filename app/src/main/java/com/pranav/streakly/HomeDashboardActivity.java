@@ -3,6 +3,7 @@ package com.pranav.streakly;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -10,7 +11,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -33,14 +33,15 @@ import java.util.Map;
 import java.util.Random;
 
 public class HomeDashboardActivity extends AppCompatActivity {
-
-    BottomNavigationView bottomNavigationView;
-    TextView tvGreeting, tvMotivation;
-    FirebaseUser currentUser;
-    FloatingActionButton fabAddHabit;
-    List<Habit> habitList = new ArrayList<>();
+    private BottomNavigationView bottomNavigationView;
+    private TextView tvGreeting, tvMotivation;
+    private FirebaseUser currentUser;
+    private FloatingActionButton fabAddHabit;
+    private List<Habit> habitList = new ArrayList<>();
     private SharedPreferences habitPreferences;
-    HabitAdapter adapter;
+    private HabitAdapter adapter;
+    private SoundPool soundPool;
+    private int habitSound;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +54,9 @@ public class HomeDashboardActivity extends AppCompatActivity {
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         fabAddHabit = findViewById(R.id.fabAddHabit);
 
+        soundPool = new SoundPool.Builder().setMaxStreams(1).build();
+        habitSound = soundPool.load(this, R.raw.habit_count_reward ,1);
+
         saveUserDetailsToFirestore();
         if(currentUser != null){
             String username = currentUser.getDisplayName();
@@ -61,7 +65,7 @@ public class HomeDashboardActivity extends AppCompatActivity {
             tvGreeting.setText("Hello User 👋");
         }
 
-        habitPreferences = getSharedPreferences("HabitPrefs", MODE_PRIVATE);
+        habitPreferences = getSharedPreferences("BadgePrefs", MODE_PRIVATE);
 
         // Set default selected item
         bottomNavigationView.setSelectedItemId(R.id.nav_home);
@@ -138,6 +142,14 @@ public class HomeDashboardActivity extends AppCompatActivity {
                     adapter.notifyDataSetChanged();
 
                     //add the logic for toast saying that the 5th habit has been added and the badge has been unlocked
+                    SharedPreferences.Editor badgeEditor = habitPreferences.edit();
+
+                    if(habitList.size() >= 5 && !habitPreferences.getBoolean("badge_habit_5", false)) {
+                        soundPool.play(habitSound, 1, 1, 0, 0, 1);
+                        Toast.makeText(this, "Congrats! You have unlocked a new badge: Habit Master", Toast.LENGTH_LONG).show();
+                        badgeEditor.putBoolean("badge_habit_5", true);
+                    }
+                    badgeEditor.apply();
                 });
     }
 
@@ -179,6 +191,5 @@ public class HomeDashboardActivity extends AppCompatActivity {
                 .set(userData, SetOptions.merge()) // merge keeps existing data (like habits)
                 .addOnSuccessListener(unused -> Log.d("Firestore", "User saved/updated"))
                 .addOnFailureListener(e -> Log.e("Firestore", "Error saving user", e));
-
     }
 }
