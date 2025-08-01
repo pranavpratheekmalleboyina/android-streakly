@@ -1,5 +1,6 @@
 package com.pranav.streakly;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -19,7 +20,6 @@ import java.util.Map;
 public class AddHabitActivity extends AppCompatActivity {
     private EditText etHabitName, etTargetProgress;
     private Button btnSaveHabit;
-
     private FirebaseFirestore db;
     private FirebaseUser user;
 
@@ -53,7 +53,6 @@ public class AddHabitActivity extends AppCompatActivity {
         Map<String, Object> habit = new HashMap<>();
         habit.put("name", name);
         habit.put("goal", goal);
-        habit.put("progress", 0);
         habit.put("createdAt", FieldValue.serverTimestamp());
 
         db.collection("users")
@@ -61,7 +60,7 @@ public class AddHabitActivity extends AppCompatActivity {
                 .collection("habits")
                 .add(habit)
                 .addOnSuccessListener(docRef -> {
-                    Toast.makeText(this, "Habit saved successfully!", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(this, "Habit saved successfully!", Toast.LENGTH_SHORT).show();
                     finish(); // close screen
                 })
                 .addOnFailureListener(e -> {

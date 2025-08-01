@@ -56,7 +56,7 @@ public class StatsActivity extends AppCompatActivity {
                     tvCurrentStreak.setText("🔥 Current Streak: 0");
                 }
 
-                // TODO: Optionally render unlocked badges based on logs or streaks here
+                unlockBadges(totalLogs, bestStreak, totalHabits);
             }
 
             @Override
@@ -65,4 +65,31 @@ public class StatsActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void unlockBadges(int totalLogs, int bestStreak, int totalHabits) {
+        layoutBadges.removeAllViews();
+
+        if (totalLogs >= 20) addBadgeView("🏅 Consistency Champ", "20 days in!");
+        if (bestStreak >= 10) addBadgeView("🔥 Habit Conquerer", "10-day streak achieved!");
+        if (totalHabits >= 5) addBadgeView("🧠 Habit Emperor", "Created 5 habits!");
+    }
+
+    private void addBadgeView(String title, String desc) {
+        TextView badge = new TextView(this);
+        badge.setText(title + "\n" + desc);
+        badge.setTextSize(14f);
+        badge.setPadding(24, 16, 24, 16);
+        badge.setBackgroundResource(R.drawable.badge_bg); // Add your own drawable
+        badge.setTextColor(getColor(android.R.color.black));
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        params.setMargins(12, 12, 12, 12);
+        badge.setLayoutParams(params);
+
+        layoutBadges.addView(badge);
+    }
+
 }

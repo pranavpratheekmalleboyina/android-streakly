@@ -1,6 +1,7 @@
 package com.pranav.streakly.adapters;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,10 +27,12 @@ import java.util.Map;
 public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHolder>{
     private List<Habit> habitList;
     private Context context;
+    //private SharedPreferences badgePreferences;
 
     public HabitAdapter(List<Habit> habitList,Context context) {
         this.habitList = habitList;
         this.context = context;
+        //this.badgePreferences = context.getSharedPreferences("BadgePrefs", Context.MODE_PRIVATE);
     }
 
     @NonNull
@@ -46,6 +49,7 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
         holder.tvHabitName.setText(habit.getName());
         holder.tvHabitGoal.setText(habit.getGoal());
         holder.tvStreak.setText("Streak: " + habit.getStreakCount() + " 🔥");
+        holder.tvBestStreak.setText("Record: " + habit.getBestStreak() + " 🔥");
 
         holder.btnEdit.setOnClickListener(v -> {
             int truePosition = holder.getAdapterPosition();
@@ -68,18 +72,49 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
                 if(habit.getStreakCount() > habit.getBestStreak()){
                     habit.setBestStreak(habit.getStreakCount());
                 }
-                logProgressForUser(habitList.get(truePosition).getId(), habit.getStreakCount());
+                logProgressForUser(habitList.get(truePosition).getId(), habit.getStreakCount(),habit.getBestStreak());
                 notifyItemChanged(truePosition);
+                checkForMilestone(habit,habitList);
             }
         });
 
         holder.btnResetStreak.setOnClickListener(v ->{
             int truePosition = holder.getAdapterPosition();
             if (truePosition != RecyclerView.NO_POSITION) {
-                logProgressForUser(habitList.get(truePosition).getId(), 0);
+                logProgressForUser(habitList.get(truePosition).getId(), 0,habit.getBestStreak());
                 notifyItemChanged(truePosition);
             }
         });
+    }
+
+    private void checkForMilestone(Habit habit,List<Habit> habits) {
+        //SharedPreferences.Editor badgeEditor = badgePreferences.edit();
+        int totalStreakCount = 0;
+        int streakCount = habit.getStreakCount();
+        int noOfHabits = habits.size();
+
+        for(Habit hab : habits){
+            totalStreakCount += hab.getStreakCount();
+        }
+
+        //&& !badgePreferences.getBoolean("badge_logs_10", false)
+        if(totalStreakCount >= 20 ){
+            Toast.makeText(context, "Congrats! You have unlocked a new badge: Consistency Champ", Toast.LENGTH_SHORT).show();
+            //badgeEditor.putBoolean("badge_logs_10", true);
+        }
+
+        //&& !badgePreferences.getBoolean("badge_streak_7", false)
+        if(streakCount >= 10 ){
+            Toast.makeText(context, "Congrats! You have unlocked a new badge: 1 week Streakster", Toast.LENGTH_SHORT).show();
+            //badgeEditor.putBoolean("badge_streak_7", true);
+        }
+
+        /*if(noOfHabits >= 5 && !badgePreferences.getBoolean("badge_habit_5", false)){
+            Toast.makeText(context, "Congrats! You have unlocked a new badge: Habit Master", Toast.LENGTH_LONG).show();
+            badgeEditor.putBoolean("badge_habit_5", true);
+        }*/
+
+        //badgeEditor.apply();
     }
 
     @Override
@@ -106,7 +141,7 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
                 .document(habitId)
                 .delete()
                 .addOnSuccessListener(unused -> {
-                    Toast.makeText(context, "Habit deleted", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(context, "Habit deleted", Toast.LENGTH_SHORT).show();
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(context, "Failed to delete", Toast.LENGTH_SHORT).show();
@@ -155,20 +190,21 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
                     updatedHabit.setName(newName);
                     updatedHabit.setGoal(newGoal);
                     notifyItemChanged(position);
-                    Toast.makeText(context, "Habit updated", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(context, "Habit updated", Toast.LENGTH_SHORT).show();
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(context, "Failed to update habit", Toast.LENGTH_SHORT).show();
                 });
     }
 
-    private void logProgressForUser(String habitId, int streakCount){
+    private void logProgressForUser(String habitId, int streakCount,int bestStreak){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) return;
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Map<String, Object> updates = new HashMap<>();
         updates.put("streakCount", streakCount);
+        updates.put("bestStreak", bestStreak);
 
         db.collection("users")
                 .document(user.getUid())
@@ -178,7 +214,7 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
     }
 
     public static class HabitViewHolder extends RecyclerView.ViewHolder {
-        TextView tvHabitName, tvStreak, tvHabitGoal;
+        TextView tvHabitName, tvStreak, tvHabitGoal,tvBestStreak;
         ImageView btnEdit,btnDelete,btnLog,btnResetStreak;
 
         public HabitViewHolder(@NonNull View itemView) {
@@ -186,6 +222,7 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
             tvHabitGoal = itemView.findViewById(R.id.tvHabitGoal);
             tvHabitName = itemView.findViewById(R.id.tvHabitName);
             tvStreak = itemView.findViewById(R.id.tvStreak);
+            tvBestStreak = itemView.findViewById(R.id.tvBestStreak);
             btnEdit = itemView.findViewById(R.id.btnEdit);
             btnDelete = itemView.findViewById(R.id.btnDelete);
             btnLog = itemView.findViewById(R.id.btnLog);

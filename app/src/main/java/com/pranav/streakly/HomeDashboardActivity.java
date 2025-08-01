@@ -39,7 +39,7 @@ public class HomeDashboardActivity extends AppCompatActivity {
     FirebaseUser currentUser;
     FloatingActionButton fabAddHabit;
     List<Habit> habitList = new ArrayList<>();
-
+    private SharedPreferences habitPreferences;
     HabitAdapter adapter;
 
     @Override
@@ -60,6 +60,8 @@ public class HomeDashboardActivity extends AppCompatActivity {
         }else{
             tvGreeting.setText("Hello User 👋");
         }
+
+        habitPreferences = getSharedPreferences("HabitPrefs", MODE_PRIVATE);
 
         // Set default selected item
         bottomNavigationView.setSelectedItemId(R.id.nav_home);

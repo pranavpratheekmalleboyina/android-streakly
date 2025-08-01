@@ -14,7 +14,7 @@ import java.util.List;
 public class StatsHelper {
 
     public interface StatsCallback {
-        void onStatsComputed(int totalHabits, int totalLogs, int bestStreak, List<Habit> habitList);
+        void onStatsComputed(int totalHabits, int totalLogs, int currentStreak, List<Habit> habitList);
         void onFailure(Exception e);
     }
 
