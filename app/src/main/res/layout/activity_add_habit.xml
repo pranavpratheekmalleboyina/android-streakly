@@ -4,29 +4,53 @@
     android:padding="24dp"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/app_background">
+
+    <TextView
+        android:text="Habit Creation "
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"/>
 
     <EditText
         android:id="@+id/etHabitName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
-        android:hint="Habit Name" />
+        android:layout_marginTop="56dp"
+        android:hint="Habit Name"
+        android:padding="12dp"
+        android:background="@drawable/input_bg"/>
 
     <EditText
-        android:id="@+id/etTargetProgress"
+        android:id="@+id/etHabitGoal"
         android:hint="Goal (e.g.read 20 pages daily)"
         android:inputType="text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="16dp"
+        android:padding="12dp"
+        android:background="@drawable/input_bg"/>
 
     <!-- Save Habit -->
     <Button
-        android:id="@+id/btnSaveHabit"
-        android:text="Save Habit"
+        android:id="@+id/btnCreateHabit"
+        android:text="Create"
         android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"/>
+        android:layout_marginTop="24dp"
+        android:background="@drawable/rounded_button_green"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="12dp"
+        android:text="(*Please enter both the values in order to create the habit)"
+        android:textSize="12sp"
+        android:textStyle="italic" />
+
+
 </LinearLayout>

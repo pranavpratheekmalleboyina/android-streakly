@@ -1,5 +1,6 @@
 package com.pranav.streakly;
 
+import android.app.AlertDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -18,8 +19,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AddHabitActivity extends AppCompatActivity {
-    private EditText etHabitName, etTargetProgress;
-    private Button btnSaveHabit;
+    private EditText etHabitName, etHabitGoal;
+    private Button btnCreateHabit;
     private FirebaseFirestore db;
     private FirebaseUser user;
 
@@ -29,19 +30,29 @@ public class AddHabitActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_habit);
 
         etHabitName = findViewById(R.id.etHabitName);
-        etTargetProgress = findViewById(R.id.etTargetProgress);
-        btnSaveHabit = findViewById(R.id.btnSaveHabit);
+        etHabitGoal = findViewById(R.id.etHabitGoal);
+        btnCreateHabit = findViewById(R.id.btnCreateHabit);
 
         // Initialize Firebase
         db = FirebaseFirestore.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
 
-        btnSaveHabit.setOnClickListener(this::saveDetails);
+        btnCreateHabit.setOnClickListener(
+                v -> {
+                    new AlertDialog.Builder(this)
+                            .setTitle("Create Habit")
+                            .setMessage("Are you sure you want to create this habit?")
+                            .setPositiveButton("Yes", (dialog, which) -> {
+                                createDetails();
+                            })
+                            .setNegativeButton("No", null)
+                            .show();
+                }
+        );
     }
-
-    private void saveDetails(View view){
+    private void createDetails(){
         String name = etHabitName.getText().toString();
-        String goal = etTargetProgress.getText().toString();
+        String goal = etHabitGoal.getText().toString();
 
         if (name.isEmpty() || goal.isEmpty()) {
             Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
@@ -60,7 +71,6 @@ public class AddHabitActivity extends AppCompatActivity {
                 .collection("habits")
                 .add(habit)
                 .addOnSuccessListener(docRef -> {
-                    //Toast.makeText(this, "Habit saved successfully!", Toast.LENGTH_SHORT).show();
                     finish(); // close screen
                 })
                 .addOnFailureListener(e -> {
