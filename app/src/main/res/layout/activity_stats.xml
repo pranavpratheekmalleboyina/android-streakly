@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:chart="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFF6EC"
@@ -16,7 +18,7 @@
             android:id="@+id/tvStatsHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="📊 Your Progress Stats"
+            android:text="📊 My Habit Stats"
             android:textSize="22sp"
             android:textStyle="bold"
             android:layout_marginBottom="24dp" />
@@ -27,7 +29,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center"
-            android:weightSum="3"
+            android:weightSum="2"
             android:layout_marginBottom="20dp">
 
             <!-- Total Habits -->
@@ -44,7 +46,7 @@
                     android:text="Total Habits"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
                 <TextView
@@ -53,7 +55,7 @@
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:gravity="center"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             </LinearLayout>
 
@@ -71,7 +73,7 @@
                     android:text="Total Logs"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
                 <TextView
@@ -80,34 +82,7 @@
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:gravity="center"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-            </LinearLayout>
-
-            <!-- Avg Progress -->
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:background="@drawable/stat_card_bg"
-                android:padding="16dp"
-                android:layout_margin="4dp">
-
-                <TextView
-                    android:text="Avg Progress"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-                <TextView
-                    android:id="@+id/tvAvgProgress"
-                    android:text="0%"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:gravity="center"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             </LinearLayout>
         </LinearLayout>
@@ -120,34 +95,115 @@
             android:text="🏆 Top Habit: "
             android:textSize="16sp"
             android:textStyle="bold"
-            android:layout_marginBottom="12dp" />
+            android:layout_marginBottom="8dp" />
 
         <!-- Current Streak -->
         <TextView
             android:id="@+id/tvCurrentStreak"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="🔥 Current Streak: "
+            android:text="📈 Streak: "
             android:textSize="16sp"
             android:textStyle="bold"
             android:layout_marginBottom="24dp" />
 
-        <!-- Badge Section -->
+        <!-- Habit Chart Placeholder -->
+        <TextView
+            android:text="🔥 Habit Log Chart"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/barChart"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_marginBottom="24dp" />
+
+        <com.github.mikephil.charting.charts.PieChart
+            android:id="@+id/pieChart"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_marginBottom="16dp" />
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/lineChart"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_marginBottom="16dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="🏆 Leaderboard"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <!-- Leaderboard Headers -->
+        <LinearLayout
+            android:id="@+id/layoutLeaderboardHeader"
+            android:layout_width="238dp"
+            android:layout_height="wrap_content"
+            android:background="#E0E0E0"
+            android:orientation="horizontal"
+            android:padding="12dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="#"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="Habit Name"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Streak"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/leaderboardLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="8dp" >
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvLeaderboard"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        </LinearLayout>
+        <!-- Badges Section -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="🏅 Unlocked Badges"
             android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="8dp" />
-
-        <LinearLayout
+            android:textStyle="bold" />
+        <com.google.android.flexbox.FlexboxLayout
             android:id="@+id/layoutBadges"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:padding="8dp" />
-
+            android:padding="8dp"
+            app:flexWrap="wrap"
+            app:justifyContent="flex_start"
+            app:alignItems="flex_start"
+            android:layout_marginTop="8dp"
+            />
     </LinearLayout>
 </ScrollView>

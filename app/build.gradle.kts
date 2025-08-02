@@ -33,7 +33,8 @@ android {
 }
 
 dependencies {
-
+    implementation(libs.flexbox)
+    implementation(libs.mpandroidchart)
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.firebase.inappmessaging)
