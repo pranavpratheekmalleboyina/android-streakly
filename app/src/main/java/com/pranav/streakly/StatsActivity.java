@@ -35,7 +35,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class StatsActivity extends AppCompatActivity {
+public class StatsActivity extends NavigationActivity {
     private TextView tvTotalHabits, tvTotalLogs, tvTopHabit, tvCurrentStreak;
     private FlexboxLayout layoutBadges;
     private BarChart barChart;
@@ -63,7 +63,7 @@ public class StatsActivity extends AppCompatActivity {
         leaderboardLayout = findViewById(R.id.leaderboardLayout);
         rvLeaderboard = findViewById(R.id.rvLeaderboard);
         rvLeaderboard.setLayoutManager(new LinearLayoutManager(this));
-
+        setupBottomNavigation(R.id.nav_stats);
 
         // Optional: Style the charts
         lineChart.getDescription().setEnabled(false);

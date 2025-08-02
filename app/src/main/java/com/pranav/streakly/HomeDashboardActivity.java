@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-public class HomeDashboardActivity extends AppCompatActivity {
+public class HomeDashboardActivity extends NavigationActivity {
     private BottomNavigationView bottomNavigationView;
     private TextView tvGreeting, tvMotivation;
     private FirebaseUser currentUser;
@@ -66,11 +66,7 @@ public class HomeDashboardActivity extends AppCompatActivity {
         }
 
         habitPreferences = getSharedPreferences("BadgePrefs", MODE_PRIVATE);
-
-        // Set default selected item
-        bottomNavigationView.setSelectedItemId(R.id.nav_home);
-
-        bottomNavigationView.setOnItemSelectedListener(item -> setNavigationItems(item));
+        setupBottomNavigation(R.id.nav_home);
 
         setMotivationalQuote();
 
@@ -152,20 +148,6 @@ public class HomeDashboardActivity extends AppCompatActivity {
                     badgeEditor.apply();
                 });
     }
-
-    private boolean setNavigationItems(MenuItem item){
-        if(item.getItemId() == R.id.nav_home){
-            return true;
-        }else if(item.getItemId() == R.id.nav_stats){
-            startActivity(new Intent(this, StatsActivity.class));
-            return true;
-        }else if(item.getItemId() == R.id.nav_profile){
-            startActivity(new Intent(this, ProfileActivity.class));
-            return true;
-        }
-        return false;
-    }
-
     private void addHabits(View view){
         Intent intent = new Intent(HomeDashboardActivity.this, AddHabitActivity.class);
         startActivity(intent);

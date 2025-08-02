@@ -6,85 +6,99 @@
     android:layout_height="match_parent"
     android:background="#FFF6EC">
 
-    <!-- AppBar (Top Greeting & Quote) -->
+    <!-- AppBar (Greeting & Quote) -->
     <com.google.android.material.appbar.AppBarLayout
-        android:layout_height="wrap_content"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:background="@color/white"
         android:elevation="4dp">
 
         <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:background="#FFF6EC"
             android:orientation="vertical"
-            android:padding="16dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:padding="16dp">
+
+            <TextView
+                android:text="Home Dashboard"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"/>
 
             <TextView
                 android:id="@+id/tvGreeting"
-                android:text="Hello User 👋"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:textColor="@color/black"
-                android:layout_marginTop="20dp"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:text="Hello User 👋"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tvMotivation"
-                android:text="“Stay consistent, not necessarily perfect..”"
-                android:textSize="16sp"
-                android:textColor="@color/gray"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:text="“Stay consistent, not necessarily perfect..”"
+                android:textColor="@color/gray"
+                android:textSize="16sp" />
         </LinearLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
     <!-- Scrollable Content -->
-
-    <!-- FAB to Add New Habit -->
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="16dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_marginBottom="56dp"> <!-- Reserve space for BottomNavigation -->
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
-            <TextView
-                android:layout_width="wrap_content"
+            <!-- Header Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="My Habits"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fabAddHabit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/purple_500"
-                android:contentDescription="Add Habit"
-                app:srcCompat="@drawable/ic_add"
-                android:layout_marginLeft="20dp"
-                app:tint="@android:color/white" />
-        </LinearLayout>>
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="My Habits"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fabAddHabit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:backgroundTint="@color/purple_500"
+                    android:contentDescription="Add Habit"
+                    app:srcCompat="@drawable/ic_add"
+                    app:tint="@android:color/white" />
+            </LinearLayout>
+
+            <!-- Habit List -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerHabits"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                />
+                android:layout_marginTop="8dp"
+                android:nestedScrollingEnabled="false" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <!-- Bottom Navigation Bar -->
+    <!-- Bottom Navigation -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"
@@ -93,6 +107,5 @@
         app:menu="@menu/bottom_nav_menu"
         android:background="@color/white"
         app:itemIconTint="@color/nav_icon_color"
-        app:itemTextColor="@color/nav_text_color"/>
-
+        app:itemTextColor="@color/nav_text_color" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

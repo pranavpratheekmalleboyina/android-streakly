@@ -16,6 +16,10 @@
         android:theme="@style/Theme.Streakly">
 
         <activity
+            android:name="com.pranav.streakly.NavigationActivity"
+            android:screenOrientation="portrait"
+            android:exported="false" />
+        <activity
             android:name="com.pranav.streakly.WelcomeActivity"
             android:screenOrientation="portrait"
             android:exported="false" />

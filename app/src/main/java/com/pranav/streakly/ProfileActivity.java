@@ -21,7 +21,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends NavigationActivity {
     boolean isEditing = false;
     EditText etUsername, etEmail;
     Button btnEdit, btnSave, btnLogout, btnChangeAvatar;
@@ -47,6 +47,8 @@ public class ProfileActivity extends AppCompatActivity {
 
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         loadUserDetails(currentUser);
+
+        setupBottomNavigation(R.id.nav_profile);
         // Load saved data
         etUsername.setText(prefs.getString("username", "Guest"));
         etEmail.setText(prefs.getString("email", "guest@example.com"));
