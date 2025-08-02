@@ -19,6 +19,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.pranav.streakly.R;
+import com.pranav.streakly.enums.HabitAction;
 import com.pranav.streakly.models.Habit;
 
 import java.util.HashMap;
@@ -60,35 +61,28 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
         holder.btnEdit.setOnClickListener(v -> {
             int truePosition = holder.getAdapterPosition();
             if (truePosition != RecyclerView.NO_POSITION){
-                showEditDialog(habitList.get(truePosition), truePosition);
+                showHabitActionDialog(habitList.get(truePosition), truePosition, HabitAction.EDIT);
             }
         });
 
         holder.btnDelete.setOnClickListener(v -> {
             int truePosition = holder.getAdapterPosition();
             if (truePosition != RecyclerView.NO_POSITION) {
-                deleteHabitFromFirestore(habitList.get(truePosition).getId(), truePosition);
+                showHabitActionDialog(habitList.get(truePosition), truePosition, HabitAction.DELETE);
             }
         });
 
         holder.btnLog.setOnClickListener(v -> {
             int truePosition = holder.getAdapterPosition();
-            if (truePosition != RecyclerView.NO_POSITION) {
-                habit.setStreakCount(habit.getStreakCount() + 1);
-                if(habit.getStreakCount() > habit.getBestStreak()){
-                    habit.setBestStreak(habit.getStreakCount());
-                }
-                logProgressForUser(habitList.get(truePosition).getId(), habit.getStreakCount(),habit.getBestStreak());
-                notifyItemChanged(truePosition);
-                checkForMilestone(habit,habitList);
+            if (truePosition != RecyclerView.NO_POSITION){
+                showHabitActionDialog(habitList.get(truePosition), truePosition, HabitAction.LOG);
             }
         });
 
         holder.btnResetStreak.setOnClickListener(v ->{
             int truePosition = holder.getAdapterPosition();
             if (truePosition != RecyclerView.NO_POSITION) {
-                logProgressForUser(habitList.get(truePosition).getId(), 0,habit.getBestStreak());
-                notifyItemChanged(truePosition);
+                showHabitActionDialog(habitList.get(truePosition), truePosition, HabitAction.RESET);
             }
         });
     }
@@ -215,6 +209,67 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
                 .document(habitId)
                 .update(updates);
     }
+
+    private void showHabitActionDialog(Habit habit, int position, HabitAction action) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+        switch (action) {
+            case EDIT:
+                View editView = LayoutInflater.from(context).inflate(R.layout.dialog_edit_habit, null);
+                EditText etName = editView.findViewById(R.id.etEditName);
+                EditText etGoal = editView.findViewById(R.id.etEditGoal);
+
+                etName.setText(habit.getName());
+                etGoal.setText(habit.getGoal());
+
+                builder.setTitle("Edit Habit");
+                builder.setView(editView);
+                builder.setPositiveButton("Save", (dialog, which) -> {
+                    String newName = etName.getText().toString();
+                    String newGoal = etGoal.getText().toString();
+                    updateHabitInFirestore(habit.getId(), newName, newGoal, position);
+                });
+                builder.setNegativeButton("Cancel", null);
+                break;
+
+            case DELETE:
+                builder.setTitle("Delete Habit");
+                builder.setMessage("Are you sure you want to delete this habit? You wiil lose all your progress.");
+                builder.setPositiveButton("Yes", (dialog, which) ->
+                        deleteHabitFromFirestore(habit.getId(), position));
+                builder.setNegativeButton("Cancel", null);
+                break;
+
+            case LOG:
+                builder.setTitle("Log Streak");
+                builder.setMessage("Do you want to log your progress?");
+                builder.setPositiveButton("Yes", (dialog, which) -> {
+                    habit.setStreakCount(habit.getStreakCount() + 1);
+                    if (habit.getStreakCount() > habit.getBestStreak()) {
+                        habit.setBestStreak(habit.getStreakCount());
+                    }
+                    logProgressForUser(habit.getId(), habit.getStreakCount(), habit.getBestStreak());
+                    notifyItemChanged(position);
+                    checkForMilestone(habit, habitList);
+                });
+                builder.setNegativeButton("Cancel", null);
+                break;
+
+            case RESET:
+                builder.setTitle("Reset Streak");
+                builder.setMessage("Do you want to reset the streak? You will lose your record streak.");
+                builder.setPositiveButton("Reset", (dialog, which) -> {
+                    logProgressForUser(habit.getId(), 0, habit.getBestStreak());
+                    notifyItemChanged(position);
+                });
+                builder.setNegativeButton("Cancel", null);
+                break;
+        }
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
 
     public static class HabitViewHolder extends RecyclerView.ViewHolder {
         TextView tvHabitName, tvStreak, tvHabitGoal,tvBestStreak;

@@ -1,4 +1,4 @@
-package com.pranav.streakly;
+package com.pranav.streakly.activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -14,12 +14,13 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.pranav.streakly.R;
+import com.pranav.streakly.base.NavigationActivity;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 
 public class ProfileActivity extends NavigationActivity {
     boolean isEditing = false;

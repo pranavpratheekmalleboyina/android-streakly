@@ -1,11 +1,11 @@
-package com.pranav.streakly;
+package com.pranav.streakly.activities;
 
 import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import androidx.appcompat.app.AppCompatActivity;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.github.mikephil.charting.charts.BarChart;
@@ -28,7 +28,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.pranav.streakly.R;
 import com.pranav.streakly.adapters.LeaderboardAdapter;
+import com.pranav.streakly.base.NavigationActivity;
 import com.pranav.streakly.helpers.StatsHelper;
 import com.pranav.streakly.models.Habit;
 import java.util.ArrayList;

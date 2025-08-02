@@ -16,39 +16,39 @@
         android:theme="@style/Theme.Streakly">
 
         <activity
-            android:name="com.pranav.streakly.NavigationActivity"
+            android:name="com.pranav.streakly.base.NavigationActivity"
             android:screenOrientation="portrait"
             android:exported="false" />
         <activity
-            android:name="com.pranav.streakly.WelcomeActivity"
+            android:name="com.pranav.streakly.activities.WelcomeActivity"
             android:screenOrientation="portrait"
             android:exported="false" />
         <activity
-            android:name="com.pranav.streakly.RegisterActivity"
+            android:name="com.pranav.streakly.activities.RegisterActivity"
             android:screenOrientation="portrait"
             android:exported="false" />
         <activity
-            android:name="com.pranav.streakly.LoginActivity"
+            android:name="com.pranav.streakly.activities.LoginActivity"
             android:screenOrientation="portrait"
             android:exported="false" />
         <activity
-            android:name="com.pranav.streakly.HomeDashboardActivity"
+            android:name="com.pranav.streakly.activities.HomeDashboardActivity"
             android:screenOrientation="portrait"
             android:exported="false" />
         <activity
-            android:name="com.pranav.streakly.ProfileActivity"
+            android:name="com.pranav.streakly.activities.ProfileActivity"
             android:screenOrientation="portrait"
             android:exported="false" />
         <activity
-            android:name="com.pranav.streakly.StatsActivity"
+            android:name="com.pranav.streakly.activities.StatsActivity"
             android:screenOrientation="portrait"
             android:exported="false" />
         <activity
-            android:name="com.pranav.streakly.AddHabitActivity"
+            android:name="com.pranav.streakly.activities.AddHabitActivity"
             android:screenOrientation="portrait"
             android:exported="false" />
         <activity
-            android:name="com.pranav.streakly.SplashActivity"
+            android:name="com.pranav.streakly.activities.SplashActivity"
             android:screenOrientation="portrait"
             android:exported="true"
             android:theme="@style/Theme.Splash">

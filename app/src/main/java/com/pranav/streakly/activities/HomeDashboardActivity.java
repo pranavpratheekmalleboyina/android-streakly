@@ -1,4 +1,4 @@
-package com.pranav.streakly;
+package com.pranav.streakly.activities;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -6,12 +6,10 @@ import android.content.SharedPreferences;
 import android.media.SoundPool;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,7 +21,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
+import com.pranav.streakly.R;
 import com.pranav.streakly.adapters.HabitAdapter;
+import com.pranav.streakly.base.NavigationActivity;
 import com.pranav.streakly.models.Habit;
 
 import java.util.ArrayList;

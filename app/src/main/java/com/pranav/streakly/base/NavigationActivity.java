@@ -1,10 +1,14 @@
-package com.pranav.streakly;
+package com.pranav.streakly.base;
 
 import android.content.Intent;
 import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.pranav.streakly.activities.HomeDashboardActivity;
+import com.pranav.streakly.activities.ProfileActivity;
+import com.pranav.streakly.R;
+import com.pranav.streakly.activities.StatsActivity;
 
 public abstract class NavigationActivity extends AppCompatActivity {
 

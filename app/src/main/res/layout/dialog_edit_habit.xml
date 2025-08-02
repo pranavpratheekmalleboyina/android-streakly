@@ -2,18 +2,23 @@
     android:orientation="vertical"
     android:padding="16dp"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@drawable/habit_card_bg">
 
     <EditText
         android:id="@+id/etEditName"
         android:hint="Habit Name"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:background="@drawable/input_bg"
+        android:padding="12dp"/>
 
     <EditText
         android:id="@+id/etEditGoal"
         android:hint="Target Goal"
         android:layout_marginTop="12dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:background="@drawable/input_bg"
+        android:padding="12dp"/>
 </LinearLayout>
