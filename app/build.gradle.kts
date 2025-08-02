@@ -33,6 +33,9 @@ android {
 }
 
 dependencies {
+    implementation(libs.github.glide)
+    annotationProcessor(libs.compiler)
+    implementation(libs.firebase.storage)
     implementation(libs.flexbox)
     implementation(libs.mpandroidchart)
     implementation(libs.appcompat)

@@ -11,16 +11,23 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.pranav.streakly.R;
 import com.pranav.streakly.base.NavigationActivity;
-
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 public class ProfileActivity extends NavigationActivity {
     boolean isEditing = false;
@@ -54,14 +61,16 @@ public class ProfileActivity extends NavigationActivity {
         etUsername.setText(prefs.getString("username", "Guest"));
         etEmail.setText(prefs.getString("email", "guest@example.com"));
         String avatarUri = prefs.getString("avatarUri", null);
-        //if (avatarUri != null) ivAvatar.setImageURI(Uri.parse(avatarUri));
+        if (avatarUri != null) Glide.with(this).load(Uri.parse(avatarUri)).into(ivAvatar);
+
         imagePickerLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
                         Uri selectedImageUri = result.getData().getData();
-                        ivAvatar.setImageURI(selectedImageUri);
                         prefs.edit().putString("avatarUri", selectedImageUri.toString()).apply();
+                        Glide.with(this).load(selectedImageUri).into(ivAvatar);// display
+                        uploadAvatarToFirebase(currentUser,selectedImageUri); // 🔥 upload
                     }
                 });
 
@@ -98,13 +107,65 @@ public class ProfileActivity extends NavigationActivity {
         ));
     }
 
+    private void uploadAvatarToFirebase(FirebaseUser user,Uri imageUri){
+        if (imageUri == null || user == null) {
+            Toast.makeText(this, "Invalid image or user", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        try {
+            InputStream inputStream = getContentResolver().openInputStream(imageUri);
+            if (inputStream == null) {
+                Toast.makeText(this, "Cannot access image", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Firebase Storage path: avatars/{userId}.jpg
+            StorageReference storageRef = FirebaseStorage.getInstance()
+                    .getReference()
+                    .child("avatars/" + currentUser.getUid() + ".jpg");
+
+            // Upload the image as a stream
+            UploadTask uploadTask = storageRef.putStream(inputStream);
+            uploadTask
+                    .addOnSuccessListener(taskSnapshot -> {
+                        // Get download URL after upload
+                        storageRef.getDownloadUrl()
+                                .addOnSuccessListener(uri -> {
+                                    String downloadUrl = uri.toString();
+
+                                    // Save the image URL to SharedPreferences
+                                    prefs.edit().putString("avatarUri", downloadUrl).apply();
+
+                                    // Optional: Save to Firebase User Profile (if needed)
+                                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                            .setPhotoUri(uri)
+                                            .build();
+                                    currentUser.updateProfile(profileUpdates);
+
+                                    Toast.makeText(this, "Profile image updated", Toast.LENGTH_SHORT).show();
+                                })
+                                .addOnFailureListener(e -> {
+                                    Toast.makeText(this, "Failed to get image URL", Toast.LENGTH_SHORT).show();
+                                });
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    });
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Image does not exist at the location", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     // Handle avatar selection
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1001 && resultCode == RESULT_OK && data != null) {
             Uri imageUri = data.getData();
-            ivAvatar.setImageURI(imageUri);
+            Glide.with(this).load(imageUri).into(ivAvatar);
             assert imageUri != null;
             prefs.edit().putString("avatarUri", imageUri.toString()).apply();
         }
@@ -177,5 +238,4 @@ public class ProfileActivity extends NavigationActivity {
                 .setNegativeButton("No", null)
                 .show();
     }
-
 }

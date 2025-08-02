@@ -83,7 +83,6 @@ public class LoginActivity extends AppCompatActivity {
                 addOnCompleteListener(this, task -> {
                     loginBtn.setEnabled(true);
                     if(task.isSuccessful()){
-                        Toast.makeText(LoginActivity.this,"Login success!!",Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(LoginActivity.this,HomeDashboardActivity.class);
                         startActivity(intent);
                         finish(); // closes the login activity and prevents the user from going back to it

@@ -46,8 +46,9 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
             android:visibility="gone"
-            android:backgroundTint="#03A9F4"
-            android:textColor="#FFFFFF" />
+            android:background="@drawable/rounded_button_blue"
+            android:textColor="#FFFFFF"
+            android:padding="12dp"/>
 
         <!-- Username -->
         <com.google.android.material.textfield.TextInputLayout
@@ -59,20 +60,25 @@
                 android:id="@+id/etUsername"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:enabled="false" />
+                android:enabled="false"
+                android:background="@drawable/input_bg"
+                android:padding="12dp"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Email (read-only always) -->
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Email">
+            android:hint="Email"
+            android:layout_marginTop="12dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:enabled="false" />
+                android:enabled="false"
+                android:background="@drawable/input_bg"
+                android:padding="12dp"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Buttons -->
@@ -88,7 +94,7 @@
                 android:text="Edit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="#4CAF50"
+                android:background="@drawable/rounded_button_green"
                 android:textColor="#FFFFFF" />
 
             <Button
@@ -98,7 +104,7 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 android:layout_marginStart="8dp"
-                android:backgroundTint="#4CAF50"
+                android:background="@drawable/rounded_button_green"
                 android:textColor="#FFFFFF" />
         </LinearLayout>
 
@@ -107,8 +113,9 @@
             android:text="Logout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="#F44336"
-            android:textColor="#FFFFFF" />
+            android:background="@drawable/rounded_button_red"
+            android:textColor="#FFFFFF"
+            android:layout_marginTop="12dp" />
     </LinearLayout>
 </ScrollView>
     <!-- Bottom Navigation Bar -->
