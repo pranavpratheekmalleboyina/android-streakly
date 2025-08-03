@@ -15,9 +15,9 @@ public class LoginActivity extends AppCompatActivity {
 
     // declaring all the ui elements
     private EditText txtEmailAddress, txtPassword;
-    private Button loginBtn;
-    private TextView registerLnk;
-    private FirebaseAuth mAuth;
+    private Button loginBtn;  //for logging in the user
+    private TextView registerLnk; // in case the user is not yet logged in
+    private FirebaseAuth mAuth; // for authenticating the user and getting the user details
 
     // to login the user for the first time or after logging out
     @Override
@@ -49,7 +49,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
         if (mAuth.getCurrentUser() != null) {
             startActivity(new Intent(LoginActivity.this, HomeDashboardActivity.class));
-            finish();
+            finish();   // closes the login activity and prevents the user from going back
         }
     }
 
@@ -79,6 +79,7 @@ public class LoginActivity extends AppCompatActivity {
         // setting the button to disabled status to prevent multiple login attempts
         loginBtn.setEnabled(false);
 
+        // the process of logging in the user
         mAuth.signInWithEmailAndPassword(email,password).
                 addOnCompleteListener(this, task -> {
                     loginBtn.setEnabled(true);

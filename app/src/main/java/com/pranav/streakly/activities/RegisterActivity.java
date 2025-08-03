@@ -19,10 +19,12 @@ import com.pranav.streakly.R;
 import java.util.Objects;
 
 public class RegisterActivity extends AppCompatActivity {
+
+    // declaring all the ui elements
     private EditText txtName, txtEmailAddress, txtPassword, txtConfirmPassword;
-    private Button btnRegister;
-    private TextView loginLink;
-    private FirebaseAuth mAuth;
+    private Button btnRegister; // for registering the user
+    private TextView loginLink; // link for the user to login in case they have already logged in
+    private FirebaseAuth mAuth;  // for user authentication
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +50,7 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
+    // method for registering the user
     private void registerUser() {
         String name = txtName.getText().toString().trim();
         String email = txtEmailAddress.getText().toString().trim();
@@ -82,6 +85,7 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
+        // firebase registration of the user
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 FirebaseUser firebaseUser = mAuth.getCurrentUser();
@@ -120,6 +124,8 @@ public class RegisterActivity extends AppCompatActivity {
                 })
                 .show();
     }
+
+    // class for storing and retrieving the user data
     public static class User{
         public String name,email;
 
