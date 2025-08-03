@@ -12,6 +12,7 @@ import com.pranav.streakly.activities.StatsActivity;
 
 public abstract class NavigationActivity extends AppCompatActivity {
 
+    // to check if the activity should handle back to home
     protected boolean shouldHandleBackToHome() {
         return !(this instanceof HomeDashboardActivity);
     }
@@ -23,9 +24,11 @@ public abstract class NavigationActivity extends AppCompatActivity {
         bottomNav.setOnItemSelectedListener(this::handleNavigation);
     }
 
+    // code for handling the navigation panes
     private boolean handleNavigation(@NonNull MenuItem item) {
         int itemId = item.getItemId();
 
+        // to highlight the current item
         if (itemId == R.id.nav_home && !(this instanceof HomeDashboardActivity)) {
             startActivity(new Intent(this, HomeDashboardActivity.class));
             overridePendingTransition(0, 0);
@@ -48,6 +51,7 @@ public abstract class NavigationActivity extends AppCompatActivity {
         }
     }
 
+    // code when the back button is pressed
     @Override
     public void onBackPressed() {
         if (shouldHandleBackToHome()) {

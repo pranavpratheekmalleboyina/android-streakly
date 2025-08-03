@@ -30,21 +30,25 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 public class ProfileActivity extends NavigationActivity {
+
+    // declaring all the ui elements
     boolean isEditing = false;
     EditText etUsername, etEmail;
     Button btnEdit, btnSave, btnLogout, btnChangeAvatar;
-    ImageView ivAvatar;
+    ImageView ivAvatar; // for the profile picture
     FirebaseUser currentUser;
     SharedPreferences prefs;
-    private ActivityResultLauncher<Intent> imagePickerLauncher;
+    private ActivityResultLauncher<Intent> imagePickerLauncher; // for selecting the picture from the phone gallery
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+        // for remembering the user data
         prefs = getSharedPreferences("UserProfile", MODE_PRIVATE);
 
+        // initializing all the elements
         etUsername = findViewById(R.id.etUsername);
         etEmail = findViewById(R.id.etEmail);
         btnEdit = findViewById(R.id.btnEdit);
@@ -56,6 +60,7 @@ public class ProfileActivity extends NavigationActivity {
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         loadUserDetails(currentUser);
 
+        // the bottom navigation bar
         setupBottomNavigation(R.id.nav_profile);
         // Load saved data
         etUsername.setText(prefs.getString("username", "Guest"));
@@ -74,7 +79,7 @@ public class ProfileActivity extends NavigationActivity {
                     }
                 });
 
-        // Edit button
+        // Edit button functionality
         btnEdit.setOnClickListener(v -> showConfirmDialog(
                 "Edit Profile",
                 "Are you sure you want to edit your profile?",
@@ -82,7 +87,7 @@ public class ProfileActivity extends NavigationActivity {
                 this::editDetails
         ));
 
-        // Save button
+        // Save button functionality
         btnSave.setOnClickListener(v -> showConfirmDialog(
                 "Save Changes",
                 "Are you sure you want to save your changes?",
@@ -90,7 +95,7 @@ public class ProfileActivity extends NavigationActivity {
                 this::saveDetails
         ));
 
-        // Change avatar
+        // Change avatar functionality
         btnChangeAvatar.setOnClickListener(v -> showConfirmDialog(
                 "Change Avatar",
                 "Are you sure you want to change your avatar?",
@@ -98,7 +103,7 @@ public class ProfileActivity extends NavigationActivity {
                 this::changeAvatar
         ));
 
-        // Logout
+        // Logout functionality
         btnLogout.setOnClickListener(v -> showConfirmDialog(
                 "Logout",
                 "Are you sure you want to logout?",
@@ -107,6 +112,7 @@ public class ProfileActivity extends NavigationActivity {
         ));
     }
 
+    // uploading the selected photo to the firebase
     private void uploadAvatarToFirebase(FirebaseUser user,Uri imageUri){
         if (imageUri == null || user == null) {
             Toast.makeText(this, "Invalid image or user", Toast.LENGTH_SHORT).show();
@@ -171,6 +177,7 @@ public class ProfileActivity extends NavigationActivity {
         }
     }
 
+    // setting the different button states during the edit click
     private void editDetails(){
         isEditing = true;
         etUsername.setEnabled(true);
@@ -179,6 +186,7 @@ public class ProfileActivity extends NavigationActivity {
         btnChangeAvatar.setVisibility(View.VISIBLE);
     }
 
+    // saving the details to the db
     private void saveDetails(){
         String updatedName = etUsername.getText().toString();
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
@@ -219,6 +227,7 @@ public class ProfileActivity extends NavigationActivity {
         }
     }
 
+    // goes to the welcome screen after logging out
     private void logoutUser(){
         FirebaseAuth.getInstance().signOut();
         startActivity(new Intent(ProfileActivity.this, WelcomeActivity.class));
@@ -230,6 +239,7 @@ public class ProfileActivity extends NavigationActivity {
         imagePickerLauncher.launch(intent);
     }
 
+    // the template of the confirm dialog
     private void showConfirmDialog(String title, String message, String positiveText, Runnable onConfirm) {
         new AlertDialog.Builder(this)
                 .setTitle(title)

@@ -16,6 +16,7 @@ import java.util.List;
 
 public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.ViewHolder> {
 
+    // declaring all the ui elements
     private List<Habit> habitList;
 
     public LeaderboardAdapter(List<Habit> habitList) {
@@ -37,7 +38,7 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
         holder.tvHabitName.setText(habit.getName());
         holder.tvStreakCount.setText(" " + habit.getStreakCount());
 
-        // Highlight top 1 habit
+        // Highlighting the  top  habit
         if (position == 0) {
             holder.itemView.setBackgroundColor(Color.parseColor("#FFE082")); // Amber for gold
         } else {
@@ -50,6 +51,7 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
         return habitList.size();
     }
 
+    // this is the view holder for the recycler view
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvHabitName, tvStreakCount ,tvRank;
 

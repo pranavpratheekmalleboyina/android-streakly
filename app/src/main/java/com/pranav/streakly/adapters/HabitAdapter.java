@@ -10,27 +10,26 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.pranav.streakly.R;
 import com.pranav.streakly.enums.HabitAction;
 import com.pranav.streakly.models.Habit;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHolder>{
+
+    // declaring all the ui elements
     private List<Habit> habitList;
     private Context context;
     private SharedPreferences badgePreferences;
-    private SoundPool soundPool;
+    private SoundPool soundPool; // for loading the sounds for the badge unlock rewards
     private int soundConsistentHabitLog,soundTotalHabitLog;
 
     public HabitAdapter(List<Habit> habitList,Context context) {
@@ -42,6 +41,7 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
         soundTotalHabitLog = soundPool.load(context, R.raw.multiple_habit_log_reward, 1);
     }
 
+    // creating the view holder
     @NonNull
     @Override
     public HabitViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -49,6 +49,7 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
         return new HabitViewHolder(view);
     }
 
+    // binding the data to the view holder
     @Override
     public void onBindViewHolder(@NonNull HabitViewHolder holder, int position) {
         position = holder.getAdapterPosition();
@@ -58,6 +59,7 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
         holder.tvStreak.setText("Streak: " + habit.getStreakCount() + " 🔥");
         holder.tvBestStreak.setText("Record: " + habit.getBestStreak() + " 🔥");
 
+        // on clicking the edit button
         holder.btnEdit.setOnClickListener(v -> {
             int truePosition = holder.getAdapterPosition();
             if (truePosition != RecyclerView.NO_POSITION){
@@ -65,6 +67,7 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
             }
         });
 
+        // on clicking the delete button
         holder.btnDelete.setOnClickListener(v -> {
             int truePosition = holder.getAdapterPosition();
             if (truePosition != RecyclerView.NO_POSITION) {
@@ -72,6 +75,7 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
             }
         });
 
+        // on clicking the log button
         holder.btnLog.setOnClickListener(v -> {
             int truePosition = holder.getAdapterPosition();
             if (truePosition != RecyclerView.NO_POSITION){
@@ -79,6 +83,7 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
             }
         });
 
+        // on clicking the reset button
         holder.btnResetStreak.setOnClickListener(v ->{
             int truePosition = holder.getAdapterPosition();
             if (truePosition != RecyclerView.NO_POSITION) {
@@ -87,16 +92,19 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
         });
     }
 
+    // code for checking the badge unlock rewards
     private void checkForMilestone(Habit habit,List<Habit> habits) {
         SharedPreferences.Editor badgeEditor = badgePreferences.edit();
         int totalStreakCount = 0;
         int streakCount = habit.getStreakCount();
         int noOfHabits = habits.size();
 
+        // for getting the total number of logs till now
         for(Habit hab : habits){
             totalStreakCount += hab.getStreakCount();
         }
 
+        // ensuring that the badge unlock happens only once
         if(totalStreakCount >= 20 && !(badgePreferences.getBoolean("badge_logs_10", false))){
             soundPool.play(soundTotalHabitLog, 1, 1, 0, 0, 1);
             Toast.makeText(context, "Congrats! You have unlocked a new badge: Consistency Champ", Toast.LENGTH_SHORT).show();
@@ -116,6 +124,7 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
         return habitList.size();
     }
 
+    // deleting the habit from the firestore
     private void deleteHabitFromFirestore(String habitId, int position) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) {
@@ -146,6 +155,7 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
                 });
     }
 
+    // opens the dialog when the edit button is clicked
     private void showEditDialog(Habit habit, int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Edit Habit");
@@ -162,6 +172,7 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
             String newName = etName.getText().toString();
             String newGoal = etGoal.getText().toString();
 
+            // to save these details in the firestore
             updateHabitInFirestore(habit.getId(), newName, newGoal, position);
         });
 
@@ -194,6 +205,7 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
                 });
     }
 
+    // for logging the streak for the habits
     private void logProgressForUser(String habitId, int streakCount,int bestStreak){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) return;
@@ -210,6 +222,7 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
                 .update(updates);
     }
 
+    // this is the common dialog template for all the actions
     private void showHabitActionDialog(Habit habit, int position, HabitAction action) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
@@ -271,6 +284,7 @@ public class HabitAdapter extends RecyclerView.Adapter<HabitAdapter.HabitViewHol
     }
 
 
+    // this is the view holder for the recycler view
     public static class HabitViewHolder extends RecyclerView.ViewHolder {
         TextView tvHabitName, tvStreak, tvHabitGoal,tvBestStreak;
         ImageView btnEdit,btnDelete,btnLog,btnResetStreak;
