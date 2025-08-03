@@ -24,6 +24,7 @@
         android:padding="12dp"
         android:background="@drawable/input_bg"/>
 
+    <!-- Input field for the habit's goal -->
     <EditText
         android:id="@+id/etHabitGoal"
         android:hint="Goal (e.g.read 20 pages daily)"
@@ -34,7 +35,7 @@
         android:padding="12dp"
         android:background="@drawable/input_bg"/>
 
-    <!-- Save Habit -->
+    <!-- Button to trigger the creation of a new habit -->
     <Button
         android:id="@+id/btnCreateHabit"
         android:text="Create"
@@ -43,6 +44,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:background="@drawable/rounded_button_green"/>
+
+    <!-- Informational text guiding the user to fill both fields -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -51,6 +54,4 @@
         android:text="(*Please enter both the values in order to create the habit)"
         android:textSize="12sp"
         android:textStyle="italic" />
-
-
 </LinearLayout>

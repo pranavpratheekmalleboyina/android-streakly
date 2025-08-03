@@ -1,3 +1,4 @@
+<!-- Root LinearLayout for the dialog -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:padding="16dp"
@@ -5,6 +6,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/habit_card_bg">
 
+    <!-- EditText for entering/editing the habit name -->
     <EditText
         android:id="@+id/etEditName"
         android:hint="Habit Name"

@@ -17,6 +17,7 @@
         android:contentDescription="App Logo"
         android:src="@drawable/project_logo" />
 
+    <!-- Login Title -->
     <TextView
         android:id="@+id/txtLogin"
         android:layout_width="wrap_content"
@@ -27,6 +28,7 @@
         android:textSize="26sp"
         android:textStyle="bold" />
 
+    <!-- Email Input Field -->
     <EditText
         android:id="@+id/txtEmailAddress"
         android:layout_width="match_parent"
@@ -37,6 +39,7 @@
         android:inputType="textEmailAddress"
         />
 
+    <!-- Password Input Field -->
     <EditText
         android:id="@+id/txtPassword"
         android:layout_width="match_parent"
@@ -48,6 +51,7 @@
         android:inputType="textPassword"
         />
 
+    <!-- Sign In Button -->
     <Button
         android:id="@+id/btlLogin"
         android:layout_width="match_parent"
@@ -57,6 +61,7 @@
         android:text="Sign In"
         android:textColor="#FFFFFF" />
 
+    <!-- Link to Registration Page -->
     <TextView
         android:id="@+id/lnkRegister"
         android:layout_width="match_parent"

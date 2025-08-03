@@ -1,13 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Array of motivational quotes -->
     <string-array name="motivational_quotes">
+        <!-- Quote about consistency -->
         <item>"Stay consistent, not necessarily perfect."</item>
+        <!-- Quote about small steps -->
         <item>"Small steps every day lead to big results."</item>
+        <!-- Quote about motivation and habit -->
         <item>"Motivation gets you started. Habit keeps you going."</item>
+        <!-- Quote about progress -->
         <item>"Progress, not perfection."</item>
+        <!-- Quote about discipline -->
         <item>"Discipline is choosing what you want most over what you want now."</item>
+        <!-- Quote about present actions shaping the future -->
         <item>"Your future is created by what you do today, not tomorrow."</item>
+        <!-- Quote about self-motivation -->
         <item>"Push yourself, because no one else is going to do it for you."</item>
+        <!-- Quote about working for goals -->
         <item>"Don’t wish for it. Work for it."</item>
     </string-array>
 </resources>

@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Root layout for the profile screen, using CoordinatorLayout to enable complex interactions between views -->
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -6,8 +7,8 @@
     android:layout_height="match_parent"
     android:background="#FFF6EC">
 
-<!-- res/layout/activity_profile.xml -->
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    <!-- ScrollView to allow content to scroll if it exceeds screen height -->
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -15,6 +16,7 @@
     android:padding="24dp"
     android:layout_marginBottom="56dp">
 
+    <!-- LinearLayout to arrange profile elements vertically -->
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -22,6 +24,7 @@
         android:gravity="center_horizontal">
 
         <TextView
+            android:id="@+id/tvProfileSettings"
             android:text="Profile Settings"
             android:textSize="24sp"
             android:textStyle="bold"
@@ -29,7 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <!-- Avatar -->
+        <!-- ImageView to display the user's avatar -->
         <ImageView
             android:id="@+id/ivAvatar"
             android:layout_width="120dp"
@@ -40,6 +43,7 @@
             android:layout_marginBottom="8dp" />
 
         <Button
+
             android:id="@+id/btnChangeAvatar"
             android:text="Change Avatar"
             android:layout_width="wrap_content"
@@ -50,7 +54,7 @@
             android:textColor="#FFFFFF"
             android:padding="12dp"/>
 
-        <!-- Username -->
+        <!-- TextInputLayout and TextInputEditText for displaying and editing the username -->
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -65,7 +69,7 @@
                 android:padding="12dp"/>
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Email (read-only always) -->
+        <!-- TextInputLayout and TextInputEditText for displaying the email (read-only) -->
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -81,7 +85,7 @@
                 android:padding="12dp"/>
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Buttons -->
+        <!-- LinearLayout for Edit and Save buttons -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -90,6 +94,7 @@
             android:gravity="center">
 
             <Button
+
                 android:id="@+id/btnEdit"
                 android:text="Edit"
                 android:layout_width="wrap_content"
@@ -98,6 +103,7 @@
                 android:textColor="#FFFFFF" />
 
             <Button
+
                 android:id="@+id/btnSave"
                 android:text="Save"
                 android:layout_width="wrap_content"
@@ -109,6 +115,7 @@
         </LinearLayout>
 
         <Button
+
             android:id="@+id/btnLogout"
             android:text="Logout"
             android:layout_width="wrap_content"
@@ -130,4 +137,4 @@
         app:itemTextColor="@color/nav_text_color"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
-    <!-- Bottom Navigation Bar -->
+    <!-- End of Bottom Navigation Bar -->

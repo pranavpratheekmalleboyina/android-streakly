@@ -1,13 +1,18 @@
+<!-- Layout for a single row in the habit leaderboard -->
+<!-- Background drawable for the row -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="238dp"
     android:layout_height="wrap_content"
     android:layout_gravity="center_horizontal"
     android:layout_marginBottom="8dp"
     android:background="@drawable/bg_leaderboard_row"
     android:orientation="horizontal"
-    android:padding="12dp">
-
+    android:padding="12dp"
+    tools:ignore="MissingDefaultResource">
+    <!-- TextView to display the rank of the habit -->
     <TextView
+        tools:ignore="HardcodedText"
         android:id="@+id/tvRank"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -17,7 +22,9 @@
         android:textSize="16sp"
         android:textStyle="bold" />
 
-    <TextView
+    <!-- TextView to display the name of the habit -->
+        <TextView
+        tools:ignore="HardcodedText"
         android:id="@+id/tvHabitName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -27,7 +34,9 @@
         android:textSize="16sp"
         android:textStyle="bold" />
 
-    <TextView
+    <!-- TextView to display the streak count for the habit -->
+        <TextView
+        tools:ignore="HardcodedText"
         android:id="@+id/tvStreakCount"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

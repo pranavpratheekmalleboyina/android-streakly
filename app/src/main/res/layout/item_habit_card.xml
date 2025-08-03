@@ -8,6 +8,8 @@
     android:layout_marginTop="12dp"
     android:layout_marginHorizontal="16dp">
 
+    <!-- Root LinearLayout for the habit card item -->
+    <!-- TextView to display the habit name -->
     <TextView
         android:id="@+id/tvHabitName"
         android:layout_width="wrap_content"
@@ -17,6 +19,7 @@
         android:textStyle="bold"
         android:textColor="@color/black" />
 
+    <!-- TextView to display the habit goal -->
     <TextView
         android:id="@+id/tvHabitGoal"
         android:layout_width="wrap_content"
@@ -26,6 +29,7 @@
         android:textColor="@color/gray"
         android:layout_marginTop="4dp" />
 
+    <!-- LinearLayout for streak and action buttons -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -33,6 +37,7 @@
         android:gravity="center_vertical"
         android:layout_marginTop="8dp">
 
+        <!-- TextView to display the current streak -->
         <TextView
             android:id="@+id/tvStreak"
             android:layout_width="0dp"
@@ -42,6 +47,7 @@
             android:textSize="16sp"
             android:textStyle="bold" />
 
+        <!-- ImageView for logging progress (checkmark icon) -->
         <ImageView
             android:id="@+id/btnLog"
             android:layout_width="24dp"
@@ -50,6 +56,7 @@
             android:src="@drawable/ic_checkmark"
             android:contentDescription="Log Progress" />
 
+        <!-- ImageView for resetting the streak (reset icon) -->
         <ImageView
             android:id="@+id/btnResetStreak"
             android:layout_width="24dp"
@@ -58,6 +65,7 @@
             android:src="@drawable/ic_reset"
             android:contentDescription="Reset Streak" />
 
+        <!-- ImageView for editing the habit (edit icon) -->
         <ImageView
             android:id="@+id/btnEdit"
             android:layout_width="24dp"
@@ -66,6 +74,7 @@
             android:src="@drawable/ic_edit"
             android:contentDescription="Edit Habit" />
 
+        <!-- ImageView for deleting the habit (delete icon) -->
         <ImageView
             android:id="@+id/btnDelete"
             android:layout_width="24dp"
@@ -73,6 +82,8 @@
             android:src="@drawable/ic_delete"
             android:contentDescription="Delete Habit" />
     </LinearLayout>
+    <!-- LinearLayout for displaying the best streak -->
+    <!-- TextView to display the best streak -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

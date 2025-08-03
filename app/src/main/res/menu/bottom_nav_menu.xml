@@ -5,7 +5,10 @@
     <item android:id="@+id/nav_stats"
         android:title="Stats"
         android:icon="@drawable/ic_bar_chart"/>
+    <!-- Profile item in the bottom navigation menu.
+         This item allows the user to navigate to their profile screen. -->
     <item android:id="@+id/nav_profile"
         android:title="Profile"
         android:icon="@drawable/ic_person"/>
 </menu>
+<!-- End of bottom navigation menu items -->

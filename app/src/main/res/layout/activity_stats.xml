@@ -14,13 +14,15 @@
     android:padding="16dp"
     android:layout_marginBottom="56dp">
 
+    <!-- Main vertical LinearLayout to hold all content -->
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal">
 
-        <!-- Header -->
+        <!-- Header TextView for the stats page -->
+        <!-- ID for referencing in Java/Kotlin -->
         <TextView
             android:id="@+id/tvStatsHeader"
             android:layout_width="wrap_content"
