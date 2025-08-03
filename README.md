@@ -18,7 +18,7 @@ Streakly is a user-friendly app which helps users to track their daily habits an
 - Framework: Android SDK
 - UI: XML Layouts, Material Components
 - Database: Firebase
-- Navigation: Intents, Fragments , Shared Preferences
+- Navigation: Intents, Activities, Shared Preferences
 - Build Tool: Gradle
 
 ## 🛠️ Installation
