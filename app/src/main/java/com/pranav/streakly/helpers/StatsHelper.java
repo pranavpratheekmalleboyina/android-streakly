@@ -18,6 +18,7 @@ public class StatsHelper {
         void onFailure(Exception e);
     }
 
+    // to calculate the logs for statistics
     public static void computeStats(Context context, StatsCallback callback) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) {
@@ -41,7 +42,7 @@ public class StatsHelper {
 
                         totalLogs += habit.getStreakCount();
                         if (habit.getBestStreak() > bestStreak) {
-                            bestStreak = habit.getBestStreak();
+                            bestStreak = habit.getBestStreak(); // the place where the best streak record gets broken
                         }
                     }
 

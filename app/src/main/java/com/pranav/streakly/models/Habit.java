@@ -1,5 +1,6 @@
 package com.pranav.streakly.models;
 
+// this is the model class which has all the details for the habit class
 public class Habit {
     private String name;
     private String id;

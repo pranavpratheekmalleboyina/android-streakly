@@ -38,12 +38,14 @@ import java.util.Collections;
 import java.util.List;
 
 public class StatsActivity extends NavigationActivity {
+
+    // declaring all the ui elements
     private TextView tvTotalHabits, tvTotalLogs, tvTopHabit, tvCurrentStreak;
-    private FlexboxLayout layoutBadges;
+    private FlexboxLayout layoutBadges; // for displaying the badges
     private BarChart barChart;
     private LineChart lineChart;
     private PieChart pieChart;
-    private LinearLayout leaderboardLayout;
+    private LinearLayout leaderboardLayout; // for displaying the top 5 habits of the user
     private RecyclerView rvLeaderboard;
     private LeaderboardAdapter leaderboardAdapter;
 
@@ -53,6 +55,7 @@ public class StatsActivity extends NavigationActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stats);
 
+        // initializing all the ui elements
         tvTotalHabits = findViewById(R.id.tvTotalHabits);
         tvTotalLogs = findViewById(R.id.tvTotalLogs);
         tvTopHabit = findViewById(R.id.tvTopHabit);
@@ -75,6 +78,7 @@ public class StatsActivity extends NavigationActivity {
         pieChart.setCenterText("Streak Share");
         pieChart.setCenterTextSize(16f);
 
+        // load all the computed stats
         loadStats();
         fetchHabitStatsAndVisualize(); // fetch and visualize data
     }
@@ -89,7 +93,7 @@ public class StatsActivity extends NavigationActivity {
                 Habit topHabit = null;
                 for (Habit h : habits) {
                     if (h.getBestStreak() == bestStreak) {
-                        topHabit = h;
+                        topHabit = h; // in order to get the top habit from your list
                         break;
                     }
                 }
@@ -102,6 +106,7 @@ public class StatsActivity extends NavigationActivity {
                     tvCurrentStreak.setText("🔥 Current Streak: 0");
                 }
 
+                // logic for displaying the badges
                 unlockBadges(totalLogs, bestStreak, totalHabits);
                 displayBarChart(habits);
             }
@@ -114,7 +119,6 @@ public class StatsActivity extends NavigationActivity {
     }
 
     private void unlockBadges(int totalLogs, int bestStreak, int totalHabits) {
-        //layoutBadges.removeAllViews();
 
         if (totalLogs >= 20) addBadgeView("🏅 Consistency Champ", "20 logs sessions in!");
         if (bestStreak >= 10) addBadgeView("🔥 Habit Conqueror", "10-log streak achieved!");
@@ -129,6 +133,7 @@ public class StatsActivity extends NavigationActivity {
         badge.setBackgroundResource(R.drawable.badge_bg);
         badge.setTextColor(getColor(android.R.color.black));
 
+        // the badges are displayed in a flexbox layout
         FlexboxLayout.LayoutParams params = new FlexboxLayout.LayoutParams(
                 FlexboxLayout.LayoutParams.WRAP_CONTENT,
                 FlexboxLayout.LayoutParams.WRAP_CONTENT
@@ -196,6 +201,7 @@ public class StatsActivity extends NavigationActivity {
                         Habit habit = doc.toObject(Habit.class);
                         habits.add(habit);
                     }
+                    // sending these habits to display for the charts 
                     updateChartsAndLeaderboard(habits);
 
                 })
