@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AddHabitActivity extends AppCompatActivity {
+    // declares all the ui elements
     private EditText etHabitName, etHabitGoal;
     private Button btnCreateHabit;
     private FirebaseFirestore db;
@@ -28,6 +29,7 @@ public class AddHabitActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_habit);
 
+        // initializing all the ui elements
         etHabitName = findViewById(R.id.etHabitName);
         etHabitGoal = findViewById(R.id.etHabitGoal);
         btnCreateHabit = findViewById(R.id.btnCreateHabit);
@@ -36,6 +38,7 @@ public class AddHabitActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
 
+        // on clicking the create button
         btnCreateHabit.setOnClickListener(
                 v -> {
                     new AlertDialog.Builder(this)
@@ -53,6 +56,7 @@ public class AddHabitActivity extends AppCompatActivity {
         String name = etHabitName.getText().toString();
         String goal = etHabitGoal.getText().toString();
 
+        // validating the fields
         if (name.isEmpty() || goal.isEmpty()) {
             Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
             return;
@@ -70,7 +74,7 @@ public class AddHabitActivity extends AppCompatActivity {
                 .collection("habits")
                 .add(habit)
                 .addOnSuccessListener(docRef -> {
-                    finish(); // close screen
+                    finish(); // closes screen and goes back to the home screen
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(this, "Failed to save habit: " + e.getMessage(), Toast.LENGTH_SHORT).show();

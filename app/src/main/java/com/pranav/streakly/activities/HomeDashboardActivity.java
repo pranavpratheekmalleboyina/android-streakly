@@ -33,14 +33,15 @@ import java.util.Map;
 import java.util.Random;
 
 public class HomeDashboardActivity extends NavigationActivity {
-    private BottomNavigationView bottomNavigationView;
-    private TextView tvGreeting, tvMotivation;
+    // declares all the ui elements
+    private BottomNavigationView bottomNavigationView; // the pane which contains the different sections
+    private TextView tvGreeting, tvMotivation; //qoute which displays the motivation after every app open
     private FirebaseUser currentUser;
     private FloatingActionButton fabAddHabit;
     private List<Habit> habitList = new ArrayList<>();
-    private SharedPreferences habitPreferences;
+    private SharedPreferences habitPreferences; // for unlocking the habit badge
     private HabitAdapter adapter;
-    private SoundPool soundPool;
+    private SoundPool soundPool; // for playing the badge unlock sound
     private int habitSound;
 
     @Override
@@ -48,12 +49,15 @@ public class HomeDashboardActivity extends NavigationActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_dashboard);
 
+        // initializing all the ui elements
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         tvGreeting = findViewById(R.id.tvGreeting);
         tvMotivation = findViewById(R.id.tvMotivation);
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         fabAddHabit = findViewById(R.id.fabAddHabit);
 
+
+        // loading the sound to the sound pool
         soundPool = new SoundPool.Builder().setMaxStreams(1).build();
         habitSound = soundPool.load(this, R.raw.habit_count_reward ,1);
 
@@ -70,8 +74,10 @@ public class HomeDashboardActivity extends NavigationActivity {
 
         setMotivationalQuote();
 
+        // on clicking the add button
         fabAddHabit.setOnClickListener(this::addHabits);
 
+        // loading the habits from firebase
         loadHabitsForUser();
     }
 
@@ -105,6 +111,7 @@ public class HomeDashboardActivity extends NavigationActivity {
 
         adapter = new HabitAdapter(habitList,this);
 
+        // initializing the adapter for the recycler view
         recyclerHabits.setLayoutManager(new LinearLayoutManager(this));
         recyclerHabits.setAdapter(adapter);
 
@@ -129,6 +136,7 @@ public class HomeDashboardActivity extends NavigationActivity {
                         return;
                     }
 
+                    // loading the habits from the habitlist
                     habitList.clear();
                     for (DocumentSnapshot doc : queryDocumentSnapshots) {
                         Habit habit = doc.toObject(Habit.class);
@@ -148,11 +156,14 @@ public class HomeDashboardActivity extends NavigationActivity {
                     badgeEditor.apply();
                 });
     }
+
+    // it moves to the add habit page
     private void addHabits(View view){
         Intent intent = new Intent(HomeDashboardActivity.this, AddHabitActivity.class);
         startActivity(intent);
     }
 
+    // saving the user details to the db
     private void saveUserDetailsToFirestore(){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) return;
