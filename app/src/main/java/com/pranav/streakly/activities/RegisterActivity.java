@@ -7,19 +7,17 @@ import android.util.Patterns;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
+import android.util.Log;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.FirebaseDatabase;
 import com.pranav.streakly.R;
-
 import java.util.Objects;
 
 public class RegisterActivity extends AppCompatActivity {
-
     // declaring all the ui elements
     private EditText txtName, txtEmailAddress, txtPassword, txtConfirmPassword;
     private Button btnRegister; // for registering the user
@@ -96,11 +94,16 @@ public class RegisterActivity extends AppCompatActivity {
                         .child(uid)
                         .setValue(new User(name,email))
                         .addOnCompleteListener(dbTask -> {
-                            if(dbTask.isSuccessful()){
+                                   // saving the username to the firebase database
+                                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                    .setDisplayName(name)  // this is your 'name' variable
+                                    .build();
+
+                                    firebaseUser.updateProfile(profileUpdates);
                                 showAlert("Success", "Registration successful!", true);
-                            }else{
-                                showAlert("Error", "Failed to save user data. Please try again.", false);
-                            }
+                        }).addOnFailureListener( e -> {
+                                Log.e("FirebaseDB", "Error saving user", e);
+                                showAlert("Error", "Failed to save user data!", false);
                         });
             } else {
                 showAlert("Error", "Registration failed: " + Objects.requireNonNull(task.getException()).getMessage(), false);
@@ -117,8 +120,10 @@ public class RegisterActivity extends AppCompatActivity {
                 .setPositiveButton("OK", (dialog, which) -> {
                     dialog.dismiss();
                     if (success) {
-                        // Go to Home screen or Login
-                        startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                        // Go to Login screen but only once after registering
+                        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                        intent.putExtra("from_register",true);
+                        startActivity(intent);
                         finish();
                     }
                 })

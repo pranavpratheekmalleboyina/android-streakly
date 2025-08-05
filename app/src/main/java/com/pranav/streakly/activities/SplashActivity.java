@@ -11,12 +11,15 @@ import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.pranav.streakly.R;
 
 @SuppressLint("CustomSplashScreen")
 public class SplashActivity extends AppCompatActivity {
     public static final int SPLASH_DURATION = 1000;
-    SharedPreferences prefs;
+    private SharedPreferences prefs;
+    private FirebaseUser currentUser;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,6 +27,7 @@ public class SplashActivity extends AppCompatActivity {
 
         prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE);
         prefs.edit().remove("session_quote").apply();
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         //details about the animation
         ImageView splashLogo = findViewById(R.id.splashLogo);
@@ -34,7 +38,11 @@ public class SplashActivity extends AppCompatActivity {
 
         //after the splash has occurred
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            startActivity(new Intent(SplashActivity.this, WelcomeActivity.class));
+            if(currentUser != null){
+                startActivity(new Intent(SplashActivity.this, HomeDashboardActivity.class));
+            }else{
+                startActivity(new Intent(SplashActivity.this, WelcomeActivity.class));
+            }
             finish();
         }, SPLASH_DURATION);
     }

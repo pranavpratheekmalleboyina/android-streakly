@@ -47,7 +47,8 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if (mAuth.getCurrentUser() != null) {
+        boolean fromRegister = getIntent().getBooleanExtra("from_register", false);
+        if (mAuth.getCurrentUser() != null && !fromRegister) {
             startActivity(new Intent(LoginActivity.this, HomeDashboardActivity.class));
             finish();   // closes the login activity and prevents the user from going back
         }
