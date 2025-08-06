@@ -1,6 +1,7 @@
 package com.pranav.streakly.activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -16,6 +17,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -58,6 +60,7 @@ public class ProfileActivity extends NavigationActivity {
         ivAvatar = findViewById(R.id.ivAvatar);
 
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
         loadUserDetails(currentUser);
 
         // the bottom navigation bar
@@ -215,7 +218,7 @@ public class ProfileActivity extends NavigationActivity {
                 etUsername.setText(displayName);
             } else {
                 // Fallback: use email username
-                String fallbackName = email != null ? email.split("@")[0] : "User";
+                String fallbackName = email != null ? email.split("@")[0] : "user";
                 etUsername.setText(fallbackName);
             }
 

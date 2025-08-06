@@ -90,7 +90,7 @@ public class RegisterActivity extends AppCompatActivity {
                 assert firebaseUser != null;
                 String uid = firebaseUser.getUid();
 
-                FirebaseDatabase.getInstance().getReference("Users")
+                FirebaseDatabase.getInstance().getReference("users")
                         .child(uid)
                         .setValue(new User(name,email))
                         .addOnCompleteListener(dbTask -> {

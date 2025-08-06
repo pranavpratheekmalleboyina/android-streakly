@@ -20,6 +20,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.SetOptions;
 import com.pranav.streakly.R;
 import com.pranav.streakly.adapters.HabitAdapter;
@@ -43,6 +44,16 @@ public class HomeDashboardActivity extends NavigationActivity {
     private HabitAdapter adapter;
     private SoundPool soundPool; // for playing the badge unlock sound
     private int habitSound;
+
+    public ListenerRegistration getListener() {
+        return listener;
+    }
+
+    public void setListenerRegistration(ListenerRegistration listener) {
+        this.listener = listener;
+    }
+
+    private ListenerRegistration  listener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,36 +136,47 @@ public class HomeDashboardActivity extends NavigationActivity {
 
         String userId = user.getUid();
 
-        db.collection("users")
-                .document(userId)
-                .collection("habits")
-                .addSnapshotListener((queryDocumentSnapshots, error) -> {
-                    if (error != null) {
-                        // ✅ This is how you handle failure
-                        Log.e("Firestore", "Listen failed", error);
-                        Toast.makeText(this, "Failed to load habits", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
+            listener = db.collection("users")
+                    .document(userId)
+                    .collection("habits")
+                    .addSnapshotListener((queryDocumentSnapshots, error) -> {
+                        if (error != null) {
+                            // ✅ This is how you handle failure
+                            Log.e("Firestore", "Listen failed", error);
+                            Toast.makeText(this, "Failed to load habits", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
 
-                    // loading the habits from the habitlist
-                    habitList.clear();
-                    for (DocumentSnapshot doc : queryDocumentSnapshots) {
-                        Habit habit = doc.toObject(Habit.class);
-                        if(habit != null){habit.setId(doc.getId());}
-                        habitList.add(habit);
-                    }
-                    adapter.notifyDataSetChanged();
+                        // loading the habits from the habitlist
+                        habitList.clear();
+                        for (DocumentSnapshot doc : queryDocumentSnapshots) {
+                            Habit habit = doc.toObject(Habit.class);
+                            if (habit != null) {
+                                habit.setId(doc.getId());
+                            }
+                            habitList.add(habit);
+                        }
+                        adapter.notifyDataSetChanged();
 
-                    //add the logic for toast saying that the 5th habit has been added and the badge has been unlocked
-                    SharedPreferences.Editor badgeEditor = habitPreferences.edit();
+                        //add the logic for toast saying that the 5th habit has been added and the badge has been unlocked
+                        SharedPreferences.Editor badgeEditor = habitPreferences.edit();
 
-                    if(habitList.size() >= 5 && !habitPreferences.getBoolean("badge_habit_5", false)) {
-                        soundPool.play(habitSound, 1, 1, 0, 0, 1);
-                        Toast.makeText(this, "Congrats! You have unlocked a new badge: Habit Master", Toast.LENGTH_LONG).show();
-                        badgeEditor.putBoolean("badge_habit_5", true);
-                    }
-                    badgeEditor.apply();
-                });
+                        if (habitList.size() >= 5 && !habitPreferences.getBoolean("badge_habit_5", false)) {
+                            soundPool.play(habitSound, 1, 1, 0, 0, 1);
+                            Toast.makeText(this, "Congrats! You have unlocked a new badge: Habit Master", Toast.LENGTH_LONG).show();
+                            badgeEditor.putBoolean("badge_habit_5", true);
+                        }
+                        badgeEditor.apply();
+                    });
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (listener != null) {
+            listener.remove();
+            listener = null;
+        }
+        super.onDestroy();
     }
 
     // it moves to the add habit page
