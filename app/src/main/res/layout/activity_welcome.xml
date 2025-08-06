@@ -33,6 +33,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="14dp"
         android:background="@drawable/rounded_button_teal"
+        android:textColor="#FFFFFF"
+        android:elevation="4dp"
+        android:fontFamily="@font/montserrat_medium"
          />
 
     <Button
@@ -42,5 +45,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="14dp"
         android:background="@drawable/rounded_button_orange"
+        android:textColor="#FFFFFF"
+        android:elevation="4dp"
+        android:fontFamily="@font/montserrat_medium"
          />
 </LinearLayout>

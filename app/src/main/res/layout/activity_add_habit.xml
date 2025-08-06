@@ -43,7 +43,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:background="@drawable/rounded_button_green"/>
+        android:background="@drawable/rounded_button_green"
+        android:textColor="#FFFFFF"
+        android:fontFamily="@font/montserrat_medium"
+        />
 
     <!-- Informational text guiding the user to fill both fields -->
     <TextView
@@ -53,5 +56,5 @@
         android:layout_marginTop="12dp"
         android:text="(*Please enter both the values in order to create the habit)"
         android:textSize="12sp"
-        android:textStyle="italic" />
+        android:fontFamily="@font/montserrat_medium" />
 </LinearLayout>

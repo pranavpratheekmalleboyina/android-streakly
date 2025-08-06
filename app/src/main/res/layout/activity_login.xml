@@ -59,6 +59,7 @@
         android:layout_marginTop="24dp"
         android:background="@drawable/rounded_button_teal"
         android:text="Sign In"
+        android:fontFamily="@font/montserrat_medium"
         android:textColor="#FFFFFF" />
 
     <!-- Link to Registration Page -->

@@ -57,8 +57,13 @@ public class AddHabitActivity extends AppCompatActivity {
         String goal = etHabitGoal.getText().toString();
 
         // validating the fields
-        if (name.isEmpty() || goal.isEmpty()) {
-            Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+        if (name.isEmpty()) {
+            etHabitName.setError("Please enter a habit name!");
+            return;
+        }
+
+        if(goal.isEmpty()){
+            etHabitName.setError("Please enter a goal name!");
             return;
         }
 

@@ -8,3 +8,16 @@ sample user 2
 name: TestUser2
 email: testuser2@gmail.com
 password: pass456
+
+name: Rajeev Shukla
+email:enduser2@gmail.com
+password:endpass234
+
+Bill Gates
+bgates@gmail.com
+microsoft98
+
+(New Users)
+name: Tim Cook
+email: tcook@gmail.com
+password: apple2025

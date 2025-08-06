@@ -27,9 +27,9 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import android.util.Log;
 
 public class ProfileActivity extends NavigationActivity {
 
@@ -132,7 +132,7 @@ public class ProfileActivity extends NavigationActivity {
             // Firebase Storage path: avatars/{userId}.jpg
             StorageReference storageRef = FirebaseStorage.getInstance()
                     .getReference()
-                    .child("avatars/" + currentUser.getUid() + ".jpg");
+                    .child("avatars/" + user.getUid() + ".jpg");
 
             // Upload the image as a stream
             UploadTask uploadTask = storageRef.putStream(inputStream);
@@ -159,7 +159,8 @@ public class ProfileActivity extends NavigationActivity {
                                 });
                     })
                     .addOnFailureListener(e -> {
-                        Toast.makeText(this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Log.e("FirebaseStorage", "Upload failed" + e.getMessage(), e);
+                        Toast.makeText(this, "Upload failed!", Toast.LENGTH_SHORT).show();
                     });
 
         } catch (FileNotFoundException e) {
@@ -221,6 +222,8 @@ public class ProfileActivity extends NavigationActivity {
                 String fallbackName = email != null ? email.split("@")[0] : "user";
                 etUsername.setText(fallbackName);
             }
+
+            Glide.with(this).load(user.getPhotoUrl()).into(ivAvatar);
 
             // Save to SharedPreferences
             prefs.edit()
